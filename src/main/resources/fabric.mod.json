@@ -1,0 +1,17 @@
+{
+  "id": "storycraft",
+  "name": "StoryCraft Mod",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "version": "1.0.0",
+  "side": "universal",
+  "initializers": [
+    "io.github.paradoxicalblock.storycraft.main.StoryCraft"
+  ],
+  "requires": {
+    "fabric": "*"
+  },
+  "mixins": {
+    "client": "storycraft.client.json",
+    "common": "storycraft.common.json"
+  }
+}
