@@ -9,10 +9,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import io.github.paradoxicalblock.storycraft.entity.SocialVillagerFemale;
-import io.github.paradoxicalblock.storycraft.entity.SocialVillagerFemaleRenderer;
-import io.github.paradoxicalblock.storycraft.entity.SocialVillagerMale;
-import io.github.paradoxicalblock.storycraft.entity.SocialVillagerMaleRenderer;
+import io.github.paradoxicalblock.storycraft.entity.SocialVillager;
+import io.github.paradoxicalblock.storycraft.entity.SocialVillagerRenderer;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -25,8 +23,7 @@ public abstract class AddRenderers {
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void renderMixin(TextureManager textureManager_1, ItemRenderer itemRenderer_1, ReloadableResourceManager reloadableResourceManager_1, CallbackInfo info) {
 
-		this.method_17145(SocialVillagerMale.class, new SocialVillagerMaleRenderer((EntityRenderDispatcher)(Object)this));
-		this.method_17145(SocialVillagerFemale.class, new SocialVillagerFemaleRenderer((EntityRenderDispatcher)(Object)this));
+		this.method_17145(SocialVillager.class, new SocialVillagerRenderer((EntityRenderDispatcher)(Object)this));
 	}
 	@Shadow(aliases = "this$renderers") @Final
 	private Map renderers;

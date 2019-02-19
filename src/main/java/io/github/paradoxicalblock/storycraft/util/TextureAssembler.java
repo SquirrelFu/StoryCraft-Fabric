@@ -112,76 +112,76 @@ public class TextureAssembler {
         		inputstream.close();
         		if (haircolor.equals("Black"))
         		{
-        			if(hairstyle.equals(0))
+        			if(hairstyle.equals(1))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blackhairm).getInputStream();
         			}
-        			else if(hairstyle.equals(1))
+        			else if(hairstyle.equals(2))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blackhairm2).getInputStream();
         			}
-        			else if(hairstyle.equals(2))
+        			else if(hairstyle.equals(3))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blackhairm3).getInputStream();
         			}
-        			else if(hairstyle.equals(3))
+        			else if(hairstyle.equals(4))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blackhairm4).getInputStream();
         			}
         		}
         		else if(haircolor.equals("Blonde"))
         		{
-        			if(hairstyle.equals(0))
+        			if(hairstyle.equals(1))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blondehairm).getInputStream();
         			}
-        			else if(hairstyle.equals(1))
+        			else if(hairstyle.equals(2))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blondehairm2).getInputStream();
         			}
-        			else if(hairstyle.equals(2))
+        			else if(hairstyle.equals(3))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blondehairm3).getInputStream();
         			}
-        			else if(hairstyle.equals(3))
+        			else if(hairstyle.equals(4))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blondehairm4).getInputStream();
         			}
         		}
         		else if(haircolor.equals("Brown"))
         		{
-        			if(hairstyle.equals(0))
+        			if(hairstyle.equals(1))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(brownhairm).getInputStream();
         			}
-        			else if(hairstyle.equals(1))
+        			else if(hairstyle.equals(2))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(brownhairm2).getInputStream();
         			}
-        			else if(hairstyle.equals(2))
+        			else if(hairstyle.equals(3))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(brownhairm3).getInputStream();
         			}
-        			else if(hairstyle.equals(3))
+        			else if(hairstyle.equals(4))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(brownhairm4).getInputStream();
         			}
         		}
         		else if(haircolor.equals("Red"))
         		{
-        			if(hairstyle.equals(0))
+        			if(hairstyle.equals(1))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(redhairm).getInputStream();
         			}
-        			else if(hairstyle.equals(1))
+        			else if(hairstyle.equals(2))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(redhairm2).getInputStream();
         			}
-        			else if(hairstyle.equals(2))
+        			else if(hairstyle.equals(3))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(redhairm3).getInputStream();
         			}
-        			else if(hairstyle.equals(3))
+        			else if(hairstyle.equals(4))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(redhairm4).getInputStream();
         			}
@@ -223,19 +223,19 @@ public class TextureAssembler {
         		inputstream.close();
         		if (this.haircolor.equals("Black"))
         		{
-        			if (hairstyle.equals(0))
+        			if (hairstyle.equals(1))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blackhairf).getInputStream();
         			}
-        			else if (hairstyle.equals(1))
+        			else if (hairstyle.equals(2))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blackhairf2).getInputStream();
         			}
-        			else if (hairstyle.equals(2))
+        			else if (hairstyle.equals(3))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blackhairf3).getInputStream();
         			}
-        			else if (hairstyle.equals(3))
+        			else if (hairstyle.equals(4))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blackhairf4).getInputStream();
         			}
@@ -243,19 +243,19 @@ public class TextureAssembler {
         		}
         		else if (this.haircolor.equals("Blonde"))
         		{
-        			if (hairstyle.equals(0))
+        			if (hairstyle.equals(1))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blondehairf).getInputStream();
         			}
-        			else if (hairstyle.equals(1))
+        			else if (hairstyle.equals(2))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blondehairf2).getInputStream();
         			}
-        			else if (hairstyle.equals(2))
+        			else if (hairstyle.equals(3))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blondehairf3).getInputStream();
         			}
-        			else if (hairstyle.equals(3))
+        			else if (hairstyle.equals(4))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blondehairf4).getInputStream();
         			}
@@ -263,38 +263,38 @@ public class TextureAssembler {
         		}
         		else if (this.haircolor.equals("Brown"))
         		{
-        			if (hairstyle.equals(0))
+        			if (hairstyle.equals(1))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(brownhairf).getInputStream();
         			}
-        			else if(hairstyle.equals(1))
+        			else if(hairstyle.equals(2))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(brownhairf2).getInputStream();
         			}
-        			else if(hairstyle.equals(2))
+        			else if(hairstyle.equals(3))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(brownhairf3).getInputStream();
         			}
-        			else if(hairstyle.equals(3))
+        			else if(hairstyle.equals(4))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(brownhairf4).getInputStream();
         			}
         		}
         		else if(this.haircolor.equals("Red"))
         		{
-        			if(hairstyle.equals(0))
+        			if(hairstyle.equals(1))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(redhairf1).getInputStream();
         			}
-        			else if(hairstyle.equals(1))
+        			else if(hairstyle.equals(2))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(redhairf2).getInputStream();
         			}
-        			else if(hairstyle.equals(2))
+        			else if(hairstyle.equals(3))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(redhairf3).getInputStream();
         			}
-        			else if(hairstyle.equals(3))
+        			else if(hairstyle.equals(4))
         			{
         				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(redhairf4).getInputStream();
         			}

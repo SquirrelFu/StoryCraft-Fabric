@@ -3,18 +3,22 @@ package io.github.paradoxicalblock.storycraft.gui;
 import java.util.List;
 import java.util.Random;
 
-import io.github.paradoxicalblock.storycraft.entity.SocialVillagerBase;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import io.github.paradoxicalblock.storycraft.entity.SocialVillager;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.text.TranslatableTextComponent;
+import net.minecraft.util.Identifier;
 
+@Environment(EnvType.CLIENT)
 public class SocialButton extends ButtonWidget {
-
-	public SocialButton(int int_1, int int_2, int int_3, int int_4, int int_5, String string_1) {
-		super(int_1, int_2, int_3, int_4, int_5, string_1);
-	}
+	public Identifier texture = new Identifier ("storycraft","textures/gui/speechbuttonsheet.png");
 	public void onPressed(double d1, double d2)
 	{
 		SocialScreen screen = (SocialScreen) MinecraftClient.getInstance().currentScreen;
@@ -67,7 +71,7 @@ public class SocialButton extends ButtonWidget {
 		}
 		else if (this.getText() == "Charm")
 		{
-			SocialVillagerBase target = screen.getTarget();
+			SocialVillager target = screen.getTarget();
 			PlayerEntity talker = screen.getTalker();
 			if (target.getCharmed())
 			{
@@ -93,7 +97,7 @@ public class SocialButton extends ButtonWidget {
 		}
 		else if (this.getText() == "Apologize")
 		{
-			SocialVillagerBase target = screen.getTarget();
+			SocialVillager target = screen.getTarget();
 			PlayerEntity talker = screen.getTalker();
 			int opinion = target.getOpinion(talker.getUuid());
 			if (opinion >= 0)
@@ -159,7 +163,7 @@ public class SocialButton extends ButtonWidget {
 		}
 		else if(this.getText() == "Examine")
 		{
-			SocialVillagerBase target = screen.getTarget();
+			SocialVillager target = screen.getTarget();
 			PlayerEntity talker = screen.getTalker();
 			int opinion = target.getOpinion(talker.getUuid());
 			if (opinion >= 0 && opinion < 25)
@@ -196,5 +200,94 @@ public class SocialButton extends ButtonWidget {
 			}
 		}
 	}
+	
 
+	public SocialButton(int id, int x, int y, int sizex, int sizey, String name) {
+		super(id, x, y, sizex, sizey, name);
+	}
+	@Override
+	public void draw(int mouseX, int mouseY, float float_1) {
+		SocialScreen screen = (SocialScreen) MinecraftClient.getInstance().currentScreen;
+		MinecraftClient minecraftClient_1 = MinecraftClient.getInstance();
+		minecraftClient_1.getTextureManager().bindTexture(texture);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		if(this.isHovered())
+		{
+			if(this.getText() != "Socialize" && this.getText() != "Influence")
+			{
+				if (this.getText() != "Examine" && this.getText() != "Barter")
+				{
+					drawTexturedRect(x,y,122,31,width,height);
+				}
+				else
+				{
+					drawTexturedRect(x,y,59,31,width,height);
+				}
+				
+			}
+			else if(this.getText() == "Socialize")
+			{
+				if (!screen.positiveButtons.get(0).visible)
+				{
+					drawTexturedRect(x,y,0,31,width,height);
+					
+				}
+				else
+				{
+					drawTexturedRect(x,y,0,62,width,height);
+				}
+			}
+			else if(this.getText() == "Influence")
+			{
+				if (!screen.neutralButtons.get(0).visible)
+				{
+					drawTexturedRect(x,y,0,31,width,height);
+				}
+				else
+				{
+					drawTexturedRect(x,y,0,62,width,height);
+				}
+				
+			}
+			
+		}
+		else if(this.getText() == "Socialize")
+		{
+			if (screen.positiveButtons.get(0).visible)
+			{
+				drawTexturedRect(x,y,0,62,width,height);
+			}
+			else
+			{
+				drawTexturedRect(x,y,0,0,width,height);
+			}
+			
+		}
+		else if(this.getText() == "Influence")
+		{
+			if (screen.neutralButtons.get(0).visible)
+			{
+				drawTexturedRect(x,y,0,62,width,height);
+			}
+			else
+			{
+				drawTexturedRect(x,y,0,0,width,height);
+			}
+		}
+		else if (this.getText() != "Examine" && this.getText() != "Barter")
+		{
+			drawTexturedRect(x,y,122,0,width,height);
+		}
+		else
+		{
+			drawTexturedRect(x,y,59,0,width,height);
+		}
+		MinecraftClient client = MinecraftClient.getInstance();
+		TextRenderer fr = client.textRenderer;
+		drawStringCentered(fr, "§0" + this.getText(), x + width/2, y + (this.height - 16)/2, 0);
+	}
+	@Override
+	public void drawStringCentered(TextRenderer textRenderer_1, String string_1, int int_1, int int_2, int int_3) {
+	      textRenderer_1.draw(string_1, (float)(int_1 - textRenderer_1.getStringWidth(string_1) / 2), (float)int_2, int_3);
+	}
 }
