@@ -11,7 +11,10 @@ import javax.imageio.ImageIO;
 import io.github.paradoxicalblock.storycraft.util.TextureAssembler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.render.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.render.EntityRendererRegistry.Factory;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
@@ -21,7 +24,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 
 @Environment(value=EnvType.CLIENT)
-public class SocialVillagerRenderer extends MobEntityRenderer{
+public class SocialVillagerRenderer extends MobEntityRenderer {
+	public static final RenderFactory factory = new RenderFactory();
 	public SocialVillagerRenderer(EntityRenderDispatcher dispatcher)
 	{
 		super(dispatcher, new PlayerEntityModel(0.0F, false), 0.5F);
@@ -61,6 +65,14 @@ public class SocialVillagerRenderer extends MobEntityRenderer{
 		}
 		NativeImageBackedTexture texture = new NativeImageBackedTexture(base);
 		return this.getRenderManager().textureManager.registerDynamicTexture(entity.getDataTracker().get(SocialVillager.serverUUID), texture);
+	}
+	public static class RenderFactory implements Factory {
+		
+			@Override
+			public EntityRenderer<? extends Entity> create(EntityRenderDispatcher manager, EntityRendererRegistry.Context context) {
+				return new SocialVillagerRenderer(manager);
+			}
+
 	}
 
 

@@ -3,7 +3,6 @@
   "package": "io.github.paradoxicalblock.storycraft.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-	"AddRenderers"
   ],
   "injectors": {
     "defaultRequire": 1

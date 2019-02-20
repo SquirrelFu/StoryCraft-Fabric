@@ -1,7 +1,9 @@
 package io.github.paradoxicalblock.storycraft.main;
 
 import io.github.paradoxicalblock.storycraft.entity.SocialVillager;
+import io.github.paradoxicalblock.storycraft.entity.SocialVillagerRenderer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.render.EntityRendererRegistry;
 import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityCategory;
 import net.minecraft.entity.EntityType;
@@ -17,5 +19,7 @@ public class StoryCraft implements ModInitializer {
 	public static final Item SOCIAL_VILLAGER_EGG = Registry.register(Registry.ITEM, "storycraft:social_villager_egg", new SpawnEggItem(SOCIAL_VILLAGER, 5636095, 170, new Item.Settings().itemGroup(ItemGroup.MISC)));
 	@Override
 	public void onInitialize() {
+		EntityRendererRegistry.INSTANCE.register(SocialVillager.class, ((entityRenderDispatcher, context) -> new SocialVillagerRenderer(entityRenderDispatcher)));
 	}
+	
 }
