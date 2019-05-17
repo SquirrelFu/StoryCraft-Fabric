@@ -11,16 +11,17 @@ public class StoryCraft implements ModInitializer {
 
 	public static final String MOD_ID = "storycraft";
 
-	public static final EntityType<SocialVillager> SOCIAL_VILLAGER = EntityRegistryBuilder
+	public static EntityType<SocialVillager> SOCIAL_VILLAGER;
+
+    @Override
+    public void onInitialize() {
+		SOCIAL_VILLAGER = EntityRegistryBuilder
 			.<SocialVillager>createBuilder("social_villager")
 			.entity((var1, var2) -> new SocialVillager(var2))
 			.category(EntityCategory.CREATURE)
 			.egg(5651507, 12422002)
 			.size(EntitySize.constant(0.5F, 1.95F))
+			.tracker(64, 3, false)
 			.build();
-
-    @Override
-    public void onInitialize() {
-
     }
 }

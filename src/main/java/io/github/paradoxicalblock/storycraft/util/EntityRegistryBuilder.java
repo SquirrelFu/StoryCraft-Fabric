@@ -16,7 +16,7 @@ public class EntityRegistryBuilder<E extends Entity> {
 
     private static String name;
 
-    private EntityType.EntityFactory<E> class_4049;
+    private EntityType.EntityFactory<E> entityFactory;
 
     private EntityCategory category;
 
@@ -34,8 +34,8 @@ public class EntityRegistryBuilder<E extends Entity> {
         return new EntityRegistryBuilder<>();
     }
 
-    public EntityRegistryBuilder<E> entity(EntityType.EntityFactory<E> class_4049) {
-        this.class_4049 = class_4049;
+    public EntityRegistryBuilder<E> entity(EntityType.EntityFactory<E> entityFactory) {
+        this.entityFactory = entityFactory;
         return this;
     }
 
@@ -63,11 +63,11 @@ public class EntityRegistryBuilder<E extends Entity> {
     }
 
     public EntityType<E> build() {
-        EntityType<E> entityBuilder = FabricEntityTypeBuilder.<E>create(category, EntityType::create).size(size).disableSaving().build();
+        EntityType<E> entityBuilder = FabricEntityTypeBuilder.create(category, entityFactory).size(size).build();
         EntityType<E> entityType = Registry.register(Registry.ENTITY_TYPE, new Identifier(StoryCraft.MOD_ID, name), entityBuilder);
-        if ((this.alwaysUpdateVelocity)) {
+        if (this.alwaysUpdateVelocity) {
             if (this.updateIntervalTicks != 0 & this.trackingDistance != 0)
-                FabricEntityTypeBuilder.create(category, EntityType::create).size(size).trackable(trackingDistance, updateIntervalTicks, alwaysUpdateVelocity).disableSaving().build();
+                FabricEntityTypeBuilder.create(category, entityFactory).size(size).trackable(trackingDistance, updateIntervalTicks, alwaysUpdateVelocity).build();
         }
         Registry.register(Registry.ITEM, new Identifier(StoryCraft.MOD_ID, String.format("%s_spawn_egg", name)), new SpawnEggItem(entityType, primaryColor, secondaryColor, new Item.Settings().itemGroup(ItemGroup.MISC)));
         return entityType;

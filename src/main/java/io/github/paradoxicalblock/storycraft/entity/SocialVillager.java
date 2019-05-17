@@ -326,10 +326,10 @@ public class SocialVillager extends PassiveEntity {
     private String generateFirstName(String gender) throws IOException {
         String firstNameOut;
         Random rand = new Random();
-        Identifier malenames = new Identifier("neutronia:names/male.txt");
-        Identifier femalenames = new Identifier("neutronia:names/female.txt");
-        InputStream stream = MinecraftClient.getInstance().getResourceManager().getResource(malenames).getInputStream();
-        InputStream stream3 = MinecraftClient.getInstance().getResourceManager().getResource(femalenames).getInputStream();
+        Identifier male = new Identifier(StoryCraft.MOD_ID, "names/male.txt");
+        Identifier female = new Identifier(StoryCraft.MOD_ID, "names/female.txt");
+        InputStream stream = MinecraftClient.getInstance().getResourceManager().getResource(male).getInputStream();
+        InputStream stream3 = MinecraftClient.getInstance().getResourceManager().getResource(female).getInputStream();
         if (gender.equals("Male")) {
             Scanner scanner = new Scanner(stream);
             StringBuilder builder = new StringBuilder();
@@ -359,7 +359,7 @@ public class SocialVillager extends PassiveEntity {
     private String generateLastName() throws IOException {
         String lastNameOut;
         Random rand = new Random();
-        Identifier surnames = new Identifier("neutronia:names/surnames.txt");
+        Identifier surnames = new Identifier(StoryCraft.MOD_ID, "names/surnames.txt");
         InputStream stream = MinecraftClient.getInstance().getResourceManager().getResource(surnames).getInputStream();
         Scanner scanner = new Scanner(stream);
         StringBuilder builder = new StringBuilder();
