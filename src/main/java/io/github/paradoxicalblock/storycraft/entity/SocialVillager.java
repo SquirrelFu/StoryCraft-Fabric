@@ -1,5 +1,6 @@
 package io.github.paradoxicalblock.storycraft.entity;
 
+import io.github.paradoxicalblock.storycraft.entity.ai.goal.FindDiamondBlockGoal;
 import io.github.paradoxicalblock.storycraft.gui.SocialScreen;
 import io.github.paradoxicalblock.storycraft.main.StoryCraft;
 import net.fabricmc.api.EnvType;
@@ -101,6 +102,7 @@ public class SocialVillager extends PassiveEntity {
         this.goalSelector.add(9, new GoToEntityGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.add(9, new WanderAroundFarGoal(this, 0.6D));
         this.goalSelector.add(10, new LookAtEntityGoal(this, MobEntity.class, 8.0F));
+        this.goalSelector.add(5, new FindDiamondBlockGoal(this, 1.0D));
     }
 
     @Override
@@ -200,6 +202,14 @@ public class SocialVillager extends PassiveEntity {
 
     public boolean canImmediatelyDespawn(double double_1) {
         return false;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getProfession() {
+        return profession;
     }
 
     @Override
