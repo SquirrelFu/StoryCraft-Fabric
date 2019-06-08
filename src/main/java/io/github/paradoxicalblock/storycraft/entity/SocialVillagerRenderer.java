@@ -1,6 +1,9 @@
 package io.github.paradoxicalblock.storycraft.entity;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.paradoxicalblock.storycraft.socialVillager.VillagerAspects;
+import io.github.paradoxicalblock.storycraft.socialVillager.VillagerGender;
+import io.github.paradoxicalblock.storycraft.socialVillager.VillagerProfession;
 import io.github.paradoxicalblock.storycraft.util.TextureAssembler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -30,15 +33,11 @@ public class SocialVillagerRenderer extends MobEntityRenderer<SocialVillager, Pl
 		if (this.getRenderManager().textureManager.getTexture(new Identifier("minecraft:dynamic/" + entity.getDataTracker().get(SocialVillager.serverUUID) + "_1")) != null) {
 			return new Identifier("minecraft:dynamic/" + entity.getDataTracker().get(SocialVillager.serverUUID) + "_1");
 		}
-		boolean female = entity.getDataTracker().get(SocialVillager.genderUnified).equals("Female");
-		this.model = new PlayerEntityModel<>(0.0F, female);
-		String hairColor = entity.getDataTracker().get(SocialVillager.hairColorUnified);
-		String eyeColor = entity.getDataTracker().get(SocialVillager.eyeColorUnified);
-		String skinColor = entity.getDataTracker().get(SocialVillager.skinColorUnified);
-		String gender = entity.getDataTracker().get(SocialVillager.genderUnified);
-		String profession = entity.getDataTracker().get(SocialVillager.professionUnified);
-		int hairStyle = entity.getDataTracker().get(SocialVillager.hairStyleUnified);
-		BufferedImage imageBase = new TextureAssembler(eyeColor, hairColor, skinColor, hairStyle, gender, profession).createTexture();
+		VillagerAspects villagerAspects = entity.getVillagerAspects();
+		VillagerGender villagerGender = entity.getVillagerGender();
+		VillagerProfession villagerProfession = entity.getVillagerProfession();
+		this.model = new PlayerEntityModel<>(0.0F, villagerGender.getGender().equals("Female"));
+		BufferedImage imageBase = new TextureAssembler(villagerAspects, villagerGender, villagerProfession).createTexture();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		try {
 			ImageIO.write(imageBase, "png", stream);

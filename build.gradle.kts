@@ -1,5 +1,5 @@
-import net.fabricmc.loom.task.RemapJar
-import net.fabricmc.loom.task.RemapSourcesJar
+import net.fabricmc.loom.task.RemapJarTask
+import net.fabricmc.loom.task.RemapSourcesJarTask
 
 plugins {
 	wrapper
@@ -29,7 +29,14 @@ group = "io.github.paradoxicalblock"
 
 repositories {
 	mavenCentral()
+	mavenLocal()
 	maven("https://maven.fabricmc.net")
+	maven("https://minecraft.curseforge.com/api/maven")
+    maven("http://maven.sargunv.s3-website-us-west-2.amazonaws.com/")
+	maven("http://server.bbkr.space:8081/artifactory/libs-snapshot/")
+	maven( "http://server.bbkr.space:8081/artifactory/libs-release/")
+	maven("https://maven.jamieswhiteshirt.com/libs-release/")
+	maven ("https://maven.abusedmaster.xyz")
 }
 
 dependencies {
@@ -39,6 +46,20 @@ dependencies {
 
 	modCompile(group = "net.fabricmc.fabric-api", name = "fabric-api", version = Fabric.API.version)
 	include(group = "net.fabricmc.fabric-api", name = "fabric-api", version = Fabric.API.version)
+
+	modCompile(group = "cloth-config", name = "ClothConfig2", version = Dependencies.ClothConfig.version)
+    include(group = "cloth-config", name = "ClothConfig2", version = Dependencies.ClothConfig.version)
+    modCompile(group = "me.sargunvohra.mcmods", name = "auto-config", version = Dependencies.AutoConfig.version)
+    include(group = "me.sargunvohra.mcmods", name = "auto-config", version = Dependencies.AutoConfig.version)
+
+	// For dev env testing
+	modCompile("com.jamieswhiteshirt:developer-mode:1.0.11")
+	modCompile(group = "me.shedaniel", name = "RoughlyEnoughItems", version = Dependencies.REI.version)
+	modCompile("informed-load-fabric:informedload:2.1.0:1.14")
+	modCompile("the-biome-overhaul:the-biome:overhaul:1.2.0")
+	modCompile(group = "io.github.prospector.modmenu", name = "ModMenu", version = Dependencies.ModMenu.version)
+
+	compile(group="com.google.code.findbugs", name="jsr305", version="3.0.2")
 }
 
 tasks.getByName<ProcessResources>("processResources") {
@@ -59,9 +80,9 @@ val jar = tasks.getByName<Jar>("jar") {
     from("LICENSE")
 }
 
-val remapJar = tasks.getByName<RemapJar>("remapJar")
+val remapJar = tasks.getByName<RemapJarTask>("remapJar")
 
-val remapSourcesJar = tasks.getByName<RemapSourcesJar>("remapSourcesJar")
+val remapSourcesJar = tasks.getByName<RemapSourcesJarTask>("remapSourcesJar")
 
 publishing {
 	publications {

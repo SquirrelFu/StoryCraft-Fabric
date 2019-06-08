@@ -1,6 +1,9 @@
 package io.github.paradoxicalblock.storycraft.util;
 
 import io.github.paradoxicalblock.storycraft.main.StoryCraft;
+import io.github.paradoxicalblock.storycraft.socialVillager.VillagerAspects;
+import io.github.paradoxicalblock.storycraft.socialVillager.VillagerGender;
+import io.github.paradoxicalblock.storycraft.socialVillager.VillagerProfession;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -105,13 +108,13 @@ public class TextureAssembler {
 	private Identifier maleBlackmith1 = new Identifier(StoryCraft.MOD_ID, PROFESSION_LOCATION + "/male/blacksmith1.png");
 	private Identifier maleWarrior1 = new Identifier(StoryCraft.MOD_ID, PROFESSION_LOCATION + "/male/warrior1.png");
 
-	public TextureAssembler(String eyeColor, String hairColor, String skinColor, Integer hairstyle, String gender, String profession) {
-		this.eyeColor = eyeColor;
-		this.hairColor = hairColor;
-		this.skinColor = skinColor;
-		this.hairstyle = hairstyle;
-		this.gender = gender;
-		this.profession = profession;
+	public TextureAssembler(VillagerAspects villagerAspects, VillagerGender villagerGender, VillagerProfession villagerProfession) {
+		this.eyeColor = villagerAspects.getEyeColor();
+		this.hairColor = villagerAspects.getHairColor();
+		this.skinColor = villagerAspects.getSkinColor();
+		this.hairstyle = villagerAspects.getHairStyle();
+		this.gender = villagerGender.getGender();
+		this.profession = villagerProfession.getProfession();
 	}
 
 	public BufferedImage createTexture() {
@@ -306,16 +309,20 @@ public class TextureAssembler {
 
 						break;
 					case "Blonde":
-						if (hairstyle.equals(1)) {
-							inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blondeHairFemale).getInputStream();
-						} else if (hairstyle.equals(2)) {
-							inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blondeHairFemale2).getInputStream();
-						} else if (hairstyle.equals(3)) {
-							inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blondeHairFemale3).getInputStream();
-						} else if (hairstyle.equals(4)) {
-							inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blondeHairFemale4).getInputStream();
+						switch(this.hairstyle) {
+							case 1:
+								inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blondeHairFemale).getInputStream();
+								break;
+							case 2:
+								inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blondeHairFemale2).getInputStream();
+								break;
+							case 3:
+								inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blondeHairFemale3).getInputStream();
+								break;
+							case 4:
+								inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blondeHairFemale4).getInputStream();
+								break;
 						}
-
 						break;
 					case "Brown":
 						if (hairstyle.equals(1)) {

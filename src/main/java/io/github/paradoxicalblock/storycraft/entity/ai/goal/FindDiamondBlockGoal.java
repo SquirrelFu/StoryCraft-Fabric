@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.ViewableWorld;
 import net.minecraft.world.World;
 
@@ -72,7 +73,7 @@ public class FindDiamondBlockGoal extends MoveToTargetPosGoal {
     public boolean canStart() {
         if (!super.canStart()) {
             return false;
-        } else if (!this.mob.world.getGameRules().getBoolean("mobGriefing")) {
+        } else if (!this.mob.world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
             return false;
         } else {
             return super.canStart();

@@ -3,8 +3,13 @@ package io.github.paradoxicalblock.storycraft.entity;
 import io.github.paradoxicalblock.storycraft.entity.ai.goal.FindDiamondBlockGoal;
 import io.github.paradoxicalblock.storycraft.gui.SocialScreen;
 import io.github.paradoxicalblock.storycraft.main.StoryCraft;
+import io.github.paradoxicalblock.storycraft.socialVillager.VillagerAspects;
+import io.github.paradoxicalblock.storycraft.socialVillager.VillagerGender;
+import io.github.paradoxicalblock.storycraft.socialVillager.VillagerProfession;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.block.BedBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -18,9 +23,10 @@ import net.minecraft.entity.mob.*;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.tag.BlockTags;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -42,6 +48,7 @@ public class SocialVillager extends PassiveEntity {
     public static TrackedData<String> genderUnified = DataTracker.registerData(SocialVillager.class, TrackedDataHandlerRegistry.STRING);
     public static TrackedData<String> professionUnified = DataTracker.registerData(SocialVillager.class, TrackedDataHandlerRegistry.STRING);
     private static TrackedData<String> orientationUnified = DataTracker.registerData(SocialVillager.class, TrackedDataHandlerRegistry.STRING);
+    private static final TrackedData<Byte> FOX_FLAGS = DataTracker.registerData(SocialVillager.class, TrackedDataHandlerRegistry.BYTE);
     public String firstName;
     public String lastName;
     private HashMap<UUID, Integer> opinions = new HashMap<>();
@@ -57,6 +64,10 @@ public class SocialVillager extends PassiveEntity {
     private int generosity = 0;
     private boolean apologized = false;
     private boolean charmed = false;
+
+    private VillagerAspects villagerAspects = new VillagerAspects();
+    private VillagerProfession villagerProfession = new VillagerProfession();
+    private VillagerGender villagerGender = new VillagerGender();
 
     public SocialVillager(World world) {
         this(StoryCraft.SOCIAL_VILLAGER, world);
@@ -81,7 +92,7 @@ public class SocialVillager extends PassiveEntity {
         try {
             this.firstName = generateFirstName(this.gender);
             this.lastName = generateLastName();
-            this.setCustomName(new TextComponent(firstName + " " + lastName));
+            this.setCustomName(new LiteralText(firstName + " " + lastName));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -122,6 +133,28 @@ public class SocialVillager extends PassiveEntity {
         this.dataTracker.startTracking(serverUUID, this.getUuidAsString());
         this.dataTracker.startTracking(genderUnified, gender);
         this.dataTracker.startTracking(professionUnified, profession);
+        this.dataTracker.startTracking(FOX_FLAGS, (byte)0);
+    }
+
+    public boolean isSleeping() {
+        return this.getFoxFlag(32);
+    }
+
+    private void setSleeping(boolean boolean_1) {
+        this.setFoxFlag(32, boolean_1);
+    }
+
+    private void setFoxFlag(int int_1, boolean boolean_1) {
+        if (boolean_1) {
+            this.dataTracker.set(FOX_FLAGS, (byte)(this.dataTracker.get(FOX_FLAGS) | int_1));
+        } else {
+            this.dataTracker.set(FOX_FLAGS, (byte)(this.dataTracker.get(FOX_FLAGS) & ~int_1));
+        }
+
+    }
+
+    private boolean getFoxFlag(int int_1) {
+        return (this.dataTracker.get(FOX_FLAGS) & int_1) != 0;
     }
 
     public void setOpinion(UUID uuid, int newValue) {
@@ -153,51 +186,50 @@ public class SocialVillager extends PassiveEntity {
         }
         MinecraftClient.getInstance().openScreen(new SocialScreen(this, player));
         return true;
+    }
 
+    @Override
+    public void tickMovement() {
+        if (this.isSleeping() || this.cannotMove()) {
+            this.jumping = false;
+            this.sidewaysSpeed = 0.0F;
+            this.forwardSpeed = 0.0F;
+            this.field_6267 = 0.0F;
+        }
+
+        BlockState blockState_1 = world.getBlockState(this.getBlockPos());
+        if(this.getBlockPos().isWithinDistance(this.getPos(), 2.0D) && blockState_1.getBlock().matches(BlockTags.BEDS) && !blockState_1.get(BedBlock.OCCUPIED)) {
+            if (this.y > (double) this.getBlockPos().getY() + 0.4D && this.getBlockPos().isWithinDistance(this.getPos(), 1.14D)) {
+                setSleeping(true);
+            }
+        }
+
+        super.tickMovement();
     }
 
     private void setupHair() {
-        String[] hairList = {"Red", "Brown", "Black", "Blonde"};
-        int[] styleList = {1, 2, 3, 4};
-        this.hairStyle = styleList[getRand().nextInt(styleList.length)];
-        this.hairColor = hairList[getRand().nextInt(hairList.length)];
+        this.hairStyle = villagerAspects.getHairStyle();
+        this.hairColor = villagerAspects.getHairColor();
     }
 
     private void setupEyes() {
-        String[] eyeList = {"Black", "Blue", "Brown", "Green", "Lime", "Pink", "Yellow"};
-        this.eyeColor = eyeList[getRand().nextInt(eyeList.length)];
+        this.eyeColor = villagerAspects.getEyeColor();
     }
 
     private void setupSkin() {
-        String[] skinList = {"Light", "Medium", "Dark"};
-        this.skinColor = skinList[getRand().nextInt(skinList.length)];
+        this.skinColor = villagerAspects.getSkinColor();
     }
 
     private void setupGender() {
-        String[] genderList = {"Male", "Female"};
-        this.gender = genderList[getRand().nextInt(genderList.length)];
+        this.gender = villagerGender.getGender();
     }
 
     private void setupProfession() {
-        String[] professionList = {"Lumberjack", "Farmer", "Architect", "Tradesman", "Merchant", "Blacksmith", "Enchanter", "Druid", "Butcher",
-                "Librarian", "Nomad", "Baker", "Priest", "Miner", "Guard"};
-        if(random.nextInt(100) == 0)
-            this.profession = "Mayor";
-        this.profession = professionList[getRand().nextInt(professionList.length)];
+        this.profession = villagerProfession.getProfession();
     }
 
     private void setupOrientation() {
-        int orientationInt = getRand().nextInt(10);
-        if (orientationInt == 9) {
-            boolean orientationBool = getRand().nextBoolean();
-            if (orientationBool) {
-                this.sexuality = "Bisexual";
-            } else {
-                this.sexuality = "Gay";
-            }
-        } else {
-            this.sexuality = "Straight";
-        }
+        this.sexuality = villagerAspects.getSexuality();
     }
 
     public boolean canImmediatelyDespawn(double double_1) {
@@ -208,13 +240,24 @@ public class SocialVillager extends PassiveEntity {
         return gender;
     }
 
-    public String getProfession() {
-        return profession;
+
+    public VillagerAspects getVillagerAspects() {
+        return villagerAspects;
+    }
+
+    public VillagerProfession getVillagerProfession() {
+        return villagerProfession;
+    }
+
+    public VillagerGender getVillagerGender() {
+        return villagerGender;
     }
 
     @Override
     public void sleep(BlockPos blockPos_1) {
-        super.sleep(blockPos_1);
+        if(isSleeping()) {
+            this.sleep(blockPos_1);
+        }
     }
 
     @Environment(EnvType.CLIENT)
@@ -260,6 +303,7 @@ public class SocialVillager extends PassiveEntity {
         tag.putInt("Age", this.getBreedingAge());
         tag.putString("Gender", gender);
         tag.putString("Profession", profession);
+        tag.putBoolean("Sleeping", this.isSleeping());
         if (opinions.keySet().size() > 13) {
             for (UUID key : opinions.keySet()) {
                 CompoundTag opinionTag = new CompoundTag();
@@ -268,7 +312,6 @@ public class SocialVillager extends PassiveEntity {
                 tag.put(key.toString(), opinionTag);
             }
         }
-
     }
 
     private void unifiedSetup() {
@@ -297,6 +340,7 @@ public class SocialVillager extends PassiveEntity {
         this.lastName = tag.getString("Last Name");
         this.gender = tag.getString("Gender");
         this.profession = tag.getString("Profession");
+        this.setSleeping(tag.getBoolean("Sleeping"));
         for (String key : tag.getKeys()) {
             if (tag.hasUuid(key)) {
                 this.opinions.put(tag.getCompound(key).getUuid("Holder"), tag.getInt("Opinion"));
@@ -314,18 +358,6 @@ public class SocialVillager extends PassiveEntity {
         this.dataTracker.set(serverUUID, this.getUuidAsString());
         this.dataTracker.set(genderUnified, gender);
         this.dataTracker.set(professionUnified, profession);
-    }
-
-    public int getFriendliness() {
-        return this.friendliness;
-    }
-
-    public void setCharmed() {
-        this.charmed = true;
-    }
-
-    public boolean getCharmed() {
-        return this.charmed;
     }
 
     @Override

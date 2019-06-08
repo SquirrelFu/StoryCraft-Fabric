@@ -69,7 +69,7 @@ public class EntityRegistryBuilder<E extends Entity> {
             if (this.updateIntervalTicks != 0 & this.trackingDistance != 0)
                 FabricEntityTypeBuilder.create(category, entityFactory).size(size).trackable(trackingDistance, updateIntervalTicks, alwaysUpdateVelocity).build();
         }
-        Registry.register(Registry.ITEM, new Identifier(StoryCraft.MOD_ID, String.format("%s_spawn_egg", name)), new SpawnEggItem(entityType, primaryColor, secondaryColor, new Item.Settings().itemGroup(ItemGroup.MISC)));
+        Registry.register(Registry.ITEM, new Identifier(StoryCraft.MOD_ID, String.format("%s_spawn_egg", name)), new SpawnEggItem(entityType, primaryColor, secondaryColor, new Item.Settings().group(ItemGroup.MISC)));
         return entityType;
     }
 
