@@ -3,6 +3,7 @@ package io.github.paradoxicalblock.storycraft.entity;
 import io.github.paradoxicalblock.storycraft.entity.ai.goal.FindDiamondBlockGoal;
 import io.github.paradoxicalblock.storycraft.gui.SocialScreen;
 import io.github.paradoxicalblock.storycraft.main.StoryCraft;
+import io.github.paradoxicalblock.storycraft.socialVillager.SocialVillagerData;
 import io.github.paradoxicalblock.storycraft.socialVillager.VillagerAspects;
 import io.github.paradoxicalblock.storycraft.socialVillager.VillagerGender;
 import io.github.paradoxicalblock.storycraft.socialVillager.VillagerProfession;
@@ -68,6 +69,7 @@ public class SocialVillager extends PassiveEntity {
     private VillagerAspects villagerAspects = new VillagerAspects();
     private VillagerProfession villagerProfession = new VillagerProfession();
     private VillagerGender villagerGender = new VillagerGender();
+    private SocialVillagerData socialVillagerData = new SocialVillagerData(villagerAspects, villagerGender, villagerProfession);
 
     public SocialVillager(World world) {
         this(StoryCraft.SOCIAL_VILLAGER, world);
@@ -253,6 +255,10 @@ public class SocialVillager extends PassiveEntity {
         return villagerGender;
     }
 
+    public SocialVillagerData getSocialVillagerData() {
+        return socialVillagerData;
+    }
+
     @Override
     public void sleep(BlockPos blockPos_1) {
         if(isSleeping()) {
@@ -288,18 +294,18 @@ public class SocialVillager extends PassiveEntity {
     @Override
     public void writeCustomDataToTag(CompoundTag tag) {
         super.writeCustomDataToTag(tag);
-        tag.putString("Hair Color", hairColor);
-        tag.putString("Eye Color", eyeColor);
-        tag.putString("Skin Color", skinColor);
+        tag.putString("HairColor", hairColor);
+        tag.putString("EyeColor", eyeColor);
+        tag.putString("SkinColor", skinColor);
         tag.putString("Sexuality", sexuality);
-        tag.putInt("Hair Style", hairStyle);
+        tag.putInt("HairStyle", hairStyle);
         tag.putInt("Friendliness", friendliness);
         tag.putInt("Bravery", bravery);
         tag.putInt("Generosity", generosity);
         tag.putBoolean("Apologized", apologized);
         tag.putBoolean("Charmed", charmed);
-        tag.putString("First Name", firstName);
-        tag.putString("Last Name", lastName);
+        tag.putString("FirstName", firstName);
+        tag.putString("LastName", lastName);
         tag.putInt("Age", this.getBreedingAge());
         tag.putString("Gender", gender);
         tag.putString("Profession", profession);
@@ -326,18 +332,18 @@ public class SocialVillager extends PassiveEntity {
     @Override
     public void readCustomDataFromTag(CompoundTag tag) {
         super.readCustomDataFromTag(tag);
-        this.hairColor = tag.getString("Hair Color");
-        this.eyeColor = tag.getString("Eye Color");
-        this.skinColor = tag.getString("Skin Color");
+        this.hairColor = tag.getString("HairColor");
+        this.eyeColor = tag.getString("EyeColor");
+        this.skinColor = tag.getString("SkinColor");
         this.sexuality = tag.getString("Sexuality");
-        this.hairStyle = tag.getInt("Hair Style");
+        this.hairStyle = tag.getInt("HairStyle");
         this.friendliness = tag.getInt("Friendliness");
         this.bravery = tag.getInt("Bravery");
         this.generosity = tag.getInt("Generosity");
         this.apologized = tag.getBoolean("Apologized");
         this.charmed = tag.getBoolean("Charmed");
-        this.firstName = tag.getString("First Name");
-        this.lastName = tag.getString("Last Name");
+        this.firstName = tag.getString("FirstName");
+        this.lastName = tag.getString("LastName");
         this.gender = tag.getString("Gender");
         this.profession = tag.getString("Profession");
         this.setSleeping(tag.getBoolean("Sleeping"));

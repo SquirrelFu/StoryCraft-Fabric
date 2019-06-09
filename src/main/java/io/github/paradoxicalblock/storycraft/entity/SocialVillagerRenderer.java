@@ -1,9 +1,7 @@
 package io.github.paradoxicalblock.storycraft.entity;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.paradoxicalblock.storycraft.socialVillager.VillagerAspects;
-import io.github.paradoxicalblock.storycraft.socialVillager.VillagerGender;
-import io.github.paradoxicalblock.storycraft.socialVillager.VillagerProfession;
+import io.github.paradoxicalblock.storycraft.socialVillager.SocialVillagerData;
 import io.github.paradoxicalblock.storycraft.util.TextureAssembler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -33,11 +31,10 @@ public class SocialVillagerRenderer extends MobEntityRenderer<SocialVillager, Pl
 		if (this.getRenderManager().textureManager.getTexture(new Identifier("minecraft:dynamic/" + entity.getDataTracker().get(SocialVillager.serverUUID) + "_1")) != null) {
 			return new Identifier("minecraft:dynamic/" + entity.getDataTracker().get(SocialVillager.serverUUID) + "_1");
 		}
-		VillagerAspects villagerAspects = entity.getVillagerAspects();
-		VillagerGender villagerGender = entity.getVillagerGender();
-		VillagerProfession villagerProfession = entity.getVillagerProfession();
-		this.model = new PlayerEntityModel<>(0.0F, villagerGender.getGender().equals("Female"));
-		BufferedImage imageBase = new TextureAssembler(villagerAspects, villagerGender, villagerProfession).createTexture();
+		SocialVillagerData socialVillagerData = entity.getSocialVillagerData();
+		this.model = new PlayerEntityModel<>(0.0F, socialVillagerData.getVillagerGender().getGender().equals("Female"));
+		BufferedImage imageBase = new TextureAssembler(socialVillagerData.getVillagerAspects(), socialVillagerData.getVillagerGender(), socialVillagerData.getVillagerProfession())
+				.createTexture();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		try {
 			ImageIO.write(imageBase, "png", stream);
