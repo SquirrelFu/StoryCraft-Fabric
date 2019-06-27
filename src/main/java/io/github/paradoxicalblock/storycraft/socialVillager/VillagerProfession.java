@@ -13,9 +13,13 @@ public class VillagerProfession {
         setupProfession();
     }
 
+    VillagerProfession(String profession) {
+        this.profession = profession;
+    }
+
     private void setupProfession() {
         String[] professionList = {"Lumberjack", "Farmer", "Architect", "Blacksmith", "Enchanter", "Druid", "Butcher",
-                "Librarian", "Nomad", "Baker", "Priest", "Miner", "Guard"};
+                "Librarian", "Nomad", "Baker", "Priest", "Miner", "Guard", "Archer"};
         if(random.nextInt(100) == 0)
             this.profession = "Mayor";
         this.profession = professionList[random.nextInt(professionList.length)];

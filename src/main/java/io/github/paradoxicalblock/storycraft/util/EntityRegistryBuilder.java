@@ -4,7 +4,7 @@ import io.github.paradoxicalblock.storycraft.main.StoryCraft;
 import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCategory;
-import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -27,7 +27,7 @@ public class EntityRegistryBuilder<E extends Entity> {
     private int primaryColor;
     private int secondaryColor;
 
-    private EntitySize size;
+    private EntityDimensions size;
 
     public static <E extends Entity> EntityRegistryBuilder<E> createBuilder(String nameIn) {
         name = nameIn;
@@ -57,7 +57,7 @@ public class EntityRegistryBuilder<E extends Entity> {
         return this;
     }
 
-    public EntityRegistryBuilder<E> size(EntitySize size) {
+    public EntityRegistryBuilder<E> size(EntityDimensions size) {
         this.size = size;
         return this;
     }

@@ -7,6 +7,8 @@ import io.github.paradoxicalblock.storycraft.main.StoryCraft;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.ElementListWidget;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
@@ -36,36 +38,27 @@ public class SocialScreen extends Screen {
 		//blit(x, y, z, u, v, width, height, texHeight, texWidth)
 		blit(107, 62, this.blitOffset, 275.0F, 0.0F, 88, 80, 256, 512);
 
-		/*String quest = "Quests";
-		this.font.draw(quest, 100 + this.font.getStringWidth(quest), 51, 4210752);
-
-		String questName = "Quest: Carrot Collector";
-		this.font.draw(questName, 110 + this.font.getStringWidth(questName), 51, 4210752);
-
-		String newLine = "\n";
-
-		String desc = " help me!" + newLine + " My rabbits are hungry," + newLine + " But I don't have any carrots!" + newLine + " Can you help me?" + newLine + newLine + " Collect 25 carrots." + newLine + " Reward:";
-		drawWrappedString(desc, 210, 71, 153, 4210752);*/
-
 		String name = String.format("%s %s", this.target.firstName, this.target.lastName);
-		String profession = String.format("%s - %s", name, this.target.getVillagerProfession().getProfession());
-		this.font.draw(profession, 211, 51, 4210752);
+		String namePlusProfession = String.format("%s - %s", name, this.target.getVillagerProfession().getProfession());
+		this.font.draw(namePlusProfession, 211, 51, 4210752);
+
+		String profession = this.target.getVillagerProfession().getProfession();
+
+		ElementListWidget elementListWidget = new ElementListWidget(this.minecraft, 89, 100, 70, 170, 20){};
 
 		QuestManager.getQuests().forEach(quests -> {
 			for(Quest quest : quests) {
-				if(this.target.getVillagerProfession().getProfession().equals(quest.getProfession())) {
-					this.font.draw(quest.name.getPath(), 110 + this.font.getStringWidth(quest.name.getPath()), 70, 4210752);
+				if(quest.profession.equals(profession)) {
+					int i = 0;
+					SocialVillagerQuestButton socialVillagerQuestButton = new SocialVillagerQuestButton(110, 60 + i, quest.name.getPath());
+					socialVillagerQuestButton.render(10, 10, 10);
+//					this.font.draw(quest.name.getPath(), 110 + this.font.getStringWidth(quest.name.getPath()), 70, 4210752);
+					i += 15;
 				}
 			}
 		});
 
-		/*String name = String.format("%s %s", this.target.firstName, this.target.lastName);
-		TextFieldWidget nameText = new TextFieldWidget(this.font, 100, 50, this.font.getStringWidth(name) + 10, 15, name);
-		nameText.setText(name);
-		nameText.setIsEditable(false);
-		nameText.setUneditableColor(0xFFFFFF);
-		nameText.setEditableColor(0xFFFFFF);
-		nameText.render(int_1, int_2, float_1);*/
+		elementListWidget.render(10, 10, 10);
 	}
 
 	public void drawWrappedString(String text, int x, int y, int entryWidth, int color) {
@@ -78,6 +71,19 @@ public class SocialScreen extends Screen {
 
 	public SocialVillager getTarget() {
 		return this.target;
+	}
+
+	public static class SocialVillagerQuestButton extends ButtonWidget {
+
+		public SocialVillagerQuestButton(int x, int y, String text) {
+			super(x, y, 89, 20, text, ButtonWidget::onPress);
+		}
+
+		@Override
+		public void onPress() {
+			super.onPress();
+		}
+
 	}
 
 }

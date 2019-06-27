@@ -1,6 +1,8 @@
 package io.github.paradoxicalblock.storycraft.entity;
 
 import io.github.paradoxicalblock.storycraft.entity.ai.goal.FindDiamondBlockGoal;
+import io.github.paradoxicalblock.storycraft.entity.ai.goal.VillagerFarmGoal;
+import io.github.paradoxicalblock.storycraft.entity.ai.goal.VillagerStareGoal;
 import io.github.paradoxicalblock.storycraft.gui.SocialScreen;
 import io.github.paradoxicalblock.storycraft.main.StoryCraft;
 import io.github.paradoxicalblock.storycraft.socialVillager.SocialVillagerData;
@@ -9,8 +11,6 @@ import io.github.paradoxicalblock.storycraft.socialVillager.VillagerGender;
 import io.github.paradoxicalblock.storycraft.socialVillager.VillagerProfession;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.BedBlock;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -23,14 +23,16 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.*;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.BasicInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.io.IOException;
@@ -49,7 +51,6 @@ public class SocialVillager extends PassiveEntity {
     public static TrackedData<String> genderUnified = DataTracker.registerData(SocialVillager.class, TrackedDataHandlerRegistry.STRING);
     public static TrackedData<String> professionUnified = DataTracker.registerData(SocialVillager.class, TrackedDataHandlerRegistry.STRING);
     private static TrackedData<String> orientationUnified = DataTracker.registerData(SocialVillager.class, TrackedDataHandlerRegistry.STRING);
-    private static final TrackedData<Byte> FOX_FLAGS = DataTracker.registerData(SocialVillager.class, TrackedDataHandlerRegistry.BYTE);
     public String firstName;
     public String lastName;
     private HashMap<UUID, Integer> opinions = new HashMap<>();
@@ -65,6 +66,9 @@ public class SocialVillager extends PassiveEntity {
     private int generosity = 0;
     private boolean apologized = false;
     private boolean charmed = false;
+    private final BasicInventory inventory = new BasicInventory(8);
+    private boolean goalsSet;
+    private boolean staring;
 
     private VillagerAspects villagerAspects = new VillagerAspects();
     private VillagerProfession villagerProfession = new VillagerProfession();
@@ -118,10 +122,104 @@ public class SocialVillager extends PassiveEntity {
         this.goalSelector.add(5, new FindDiamondBlockGoal(this, 1.0D));
     }
 
+    private void setSpecificGoals() {
+        if (!this.goalsSet) {
+            this.goalsSet = true;
+            if (this.isBaby()) {
+                this.goalSelector.add(8, new VillagerStareGoal(this, 0.32D));
+            } else if (this.profession.equals("Farmer")) {
+                this.goalSelector.add(6, new VillagerFarmGoal(this, 0.6D));
+            } else if (this.profession.equals("Guard")) {
+                this.goalSelector.add(1, new MeleeAttackGoal(this, 1.0D, true));
+                this.goalSelector.add(2, new GoToEntityTargetGoal(this, 0.9D, 32.0F));
+                this.goalSelector.add(2, new WanderAroundPointOfInterestGoal(this, 0.6D));
+                this.goalSelector.add(3, new MoveThroughVillageGoal(this, 0.6D, false, 4, () -> false));
+                this.goalSelector.add(6, new WanderAroundFarGoal(this, 0.6D));
+                this.goalSelector.add(7, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
+                this.goalSelector.add(8, new LookAroundGoal(this));
+                this.targetSelector.add(2, new RevengeGoal(this));
+                this.targetSelector.add(3, new FollowTargetGoal<>(this, MobEntity.class, 5, false, false, (livingEntity_1) ->
+                        livingEntity_1 instanceof Monster && !(livingEntity_1 instanceof CreeperEntity)));
+
+            }
+        }
+    }
+
+    protected void onGrowUp() {
+        if (this.profession.equals("Farmer")) {
+            this.goalSelector.add(8, new VillagerFarmGoal(this, 0.6D));
+        } else if (this.profession.equals("Guard")) {
+            this.goalSelector.add(1, new MeleeAttackGoal(this, 1.0D, true));
+            this.goalSelector.add(2, new GoToEntityTargetGoal(this, 0.9D, 32.0F));
+            this.goalSelector.add(2, new WanderAroundPointOfInterestGoal(this, 0.6D));
+            this.goalSelector.add(3, new MoveThroughVillageGoal(this, 0.6D, false, 4, () -> false));
+            this.goalSelector.add(6, new WanderAroundFarGoal(this, 0.6D));
+            this.goalSelector.add(7, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
+            this.goalSelector.add(8, new LookAroundGoal(this));
+            this.targetSelector.add(2, new RevengeGoal(this));
+            this.targetSelector.add(3, new FollowTargetGoal<>(this, MobEntity.class, 5, false, false, (livingEntity_1) ->
+                    livingEntity_1 instanceof Monster && !(livingEntity_1 instanceof CreeperEntity)));
+
+        }
+
+        super.onGrowUp();
+    }
+
+    public void setStaring(boolean boolean_1) {
+        this.staring = boolean_1;
+    }
+
+    public boolean isStaring() {
+        return this.staring;
+    }
+
     @Override
     protected void initAttributes() {
         super.initAttributes();
         this.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
+    }
+
+    public BasicInventory getInventory() {
+        return this.inventory;
+    }
+
+    public boolean canBreed() {
+        boolean boolean_1 = this.profession.equals("Farmer");
+        if (boolean_1) {
+            return !this.hasEnoughFood(5);
+        } else {
+            return !this.hasEnoughFood(1);
+        }
+    }
+
+    private boolean hasEnoughFood(int int_1) {
+        boolean boolean_1 = this.profession.equals("Farmer");
+
+        for(int int_2 = 0; int_2 < this.getInventory().getInvSize(); ++int_2) {
+            ItemStack itemStack_1 = this.getInventory().getInvStack(int_2);
+            Item item_1 = itemStack_1.getItem();
+            int int_3 = itemStack_1.getCount();
+            if (item_1 == Items.BREAD && int_3 >= 3 * int_1 || item_1 == Items.POTATO && int_3 >= 12 * int_1 || item_1 == Items.CARROT && int_3 >= 12 * int_1 || item_1 == Items.BEETROOT && int_3 >= 12 * int_1) {
+                return true;
+            }
+
+            if (boolean_1 && item_1 == Items.WHEAT && int_3 >= 9 * int_1) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean hasSeed() {
+        for(int int_1 = 0; int_1 < this.getInventory().getInvSize(); ++int_1) {
+            Item item_1 = this.getInventory().getInvStack(int_1).getItem();
+            if (item_1 == Items.WHEAT_SEEDS || item_1 == Items.POTATO || item_1 == Items.CARROT || item_1 == Items.BEETROOT_SEEDS) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -135,28 +233,14 @@ public class SocialVillager extends PassiveEntity {
         this.dataTracker.startTracking(serverUUID, this.getUuidAsString());
         this.dataTracker.startTracking(genderUnified, gender);
         this.dataTracker.startTracking(professionUnified, profession);
-        this.dataTracker.startTracking(FOX_FLAGS, (byte)0);
     }
 
-    public boolean isSleeping() {
-        return this.getFoxFlag(32);
+    public <T> T get(TrackedData<T> key) {
+        return this.dataTracker.get(key);
     }
 
-    private void setSleeping(boolean boolean_1) {
-        this.setFoxFlag(32, boolean_1);
-    }
-
-    private void setFoxFlag(int int_1, boolean boolean_1) {
-        if (boolean_1) {
-            this.dataTracker.set(FOX_FLAGS, (byte)(this.dataTracker.get(FOX_FLAGS) | int_1));
-        } else {
-            this.dataTracker.set(FOX_FLAGS, (byte)(this.dataTracker.get(FOX_FLAGS) & ~int_1));
-        }
-
-    }
-
-    private boolean getFoxFlag(int int_1) {
-        return (this.dataTracker.get(FOX_FLAGS) & int_1) != 0;
+    public <T> void set(TrackedData<T> key, T value) {
+        this.dataTracker.set(key, value);
     }
 
     public void setOpinion(UUID uuid, int newValue) {
@@ -190,25 +274,6 @@ public class SocialVillager extends PassiveEntity {
         return true;
     }
 
-    @Override
-    public void tickMovement() {
-        if (this.isSleeping() || this.cannotMove()) {
-            this.jumping = false;
-            this.sidewaysSpeed = 0.0F;
-            this.forwardSpeed = 0.0F;
-            this.field_6267 = 0.0F;
-        }
-
-        BlockState blockState_1 = world.getBlockState(this.getBlockPos());
-        if(this.getBlockPos().isWithinDistance(this.getPos(), 2.0D) && blockState_1.getBlock().matches(BlockTags.BEDS) && !blockState_1.get(BedBlock.OCCUPIED)) {
-            if (this.y > (double) this.getBlockPos().getY() + 0.4D && this.getBlockPos().isWithinDistance(this.getPos(), 1.14D)) {
-                setSleeping(true);
-            }
-        }
-
-        super.tickMovement();
-    }
-
     private void setupHair() {
         this.hairStyle = villagerAspects.getHairStyle();
         this.hairColor = villagerAspects.getHairColor();
@@ -238,11 +303,6 @@ public class SocialVillager extends PassiveEntity {
         return false;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
-
     public VillagerAspects getVillagerAspects() {
         return villagerAspects;
     }
@@ -257,13 +317,6 @@ public class SocialVillager extends PassiveEntity {
 
     public SocialVillagerData getSocialVillagerData() {
         return socialVillagerData;
-    }
-
-    @Override
-    public void sleep(BlockPos blockPos_1) {
-        if(isSleeping()) {
-            this.sleep(blockPos_1);
-        }
     }
 
     @Environment(EnvType.CLIENT)
@@ -346,7 +399,6 @@ public class SocialVillager extends PassiveEntity {
         this.lastName = tag.getString("LastName");
         this.gender = tag.getString("Gender");
         this.profession = tag.getString("Profession");
-        this.setSleeping(tag.getBoolean("Sleeping"));
         for (String key : tag.getKeys()) {
             if (tag.hasUuid(key)) {
                 this.opinions.put(tag.getCompound(key).getUuid("Holder"), tag.getInt("Opinion"));
@@ -364,6 +416,8 @@ public class SocialVillager extends PassiveEntity {
         this.dataTracker.set(serverUUID, this.getUuidAsString());
         this.dataTracker.set(genderUnified, gender);
         this.dataTracker.set(professionUnified, profession);
+        this.setCanPickUpLoot(true);
+        this.setSpecificGoals();
     }
 
     @Override

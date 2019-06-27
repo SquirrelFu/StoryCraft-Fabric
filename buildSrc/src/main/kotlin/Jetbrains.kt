@@ -1,10 +1,10 @@
 object Fabric {
     object Loader {
-        const val version = "0.4.8+build.154" // https://maven.fabricmc.net/net/fabricmc/fabric-loader/
+        const val version = "0.4.8+build.155" // https://maven.fabricmc.net/net/fabricmc/fabric-loader/
     }
 
     object API {
-        const val version = "0.3.0+build.179"
+        const val version = "0.3.0+build.187"
     }
 
     object Loom {
@@ -12,13 +12,13 @@ object Fabric {
     }
 
     object Yarn {
-        const val version = "build.2"
+        const val version = "build.1"
     }
 }
 
 object Dependencies {
     object ClothConfig {
-        const val version = "0.1.0"
+        const val version = "0.2.0"
     }
     object ModMenu {
         const val version = "+"
@@ -26,14 +26,11 @@ object Dependencies {
     object AutoConfig {
         const val version = "+"
     }
-    object AbnormaLib {
-        const val version = "0.6.4+1.14.2-BETA"
-    }
     object REI {
         const val version = "2.9.4+build.128"
     }
 }
 
 object Minecraft {
-    const val version = "1.14.3-pre2"
+    const val version = "1.14.3"
 }
