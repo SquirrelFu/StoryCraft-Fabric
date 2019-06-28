@@ -8,7 +8,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ElementListWidget;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
@@ -22,14 +21,24 @@ public class SocialScreen extends Screen {
 	private SocialVillager target;
 	private PlayerEntity talker;
 
+	private SocialVillagerQuestButton[] questButtons;
+	private Quest[] quests;
+
 	public SocialScreen(SocialVillager entity, PlayerEntity player) {
 		super(new TranslatableText("narrator.screen.title"));
 		this.target = entity;
 		this.talker = player;
+
+		quests = QuestManager.getQuests().stream().filter(quest -> quest.profession.equals(target.getVillagerProfession().getProfession())).toArray(Quest[]::new);
+		questButtons = new SocialVillagerQuestButton[7];
+
+		for(int i = 0; i < 7; i++) {
+			questButtons[i] = new SocialVillagerQuestButton(107, 62 + i * 20, i < quests.length ? quests[i] : null);
+		}
 	}
 
 	@Override
-	public void render(int int_1, int int_2, float float_1) {
+	public void render(int mouseX, int mouseY, float delta) {
 		this.renderBackground();
 		this.minecraft.getTextureManager().bindTexture(TEXTURE);
 		//blit(x, y, z, u, v, width, height, texHeight, texWidth)
@@ -42,23 +51,9 @@ public class SocialScreen extends Screen {
 		String namePlusProfession = String.format("%s - %s", name, this.target.getVillagerProfession().getProfession());
 		this.font.draw(namePlusProfession, 211, 51, 4210752);
 
-		String profession = this.target.getVillagerProfession().getProfession();
-
-		ElementListWidget elementListWidget = new ElementListWidget(this.minecraft, 89, 100, 70, 170, 20){};
-
-		QuestManager.getQuests().forEach(quests -> {
-			for(Quest quest : quests) {
-				if(quest.profession.equals(profession)) {
-					int i = 0;
-					SocialVillagerQuestButton socialVillagerQuestButton = new SocialVillagerQuestButton(110, 60 + i, quest.name.getPath());
-					socialVillagerQuestButton.render(10, 10, 10);
-//					this.font.draw(quest.name.getPath(), 110 + this.font.getStringWidth(quest.name.getPath()), 70, 4210752);
-					i += 15;
-				}
-			}
-		});
-
-		elementListWidget.render(10, 10, 10);
+		for(SocialVillagerQuestButton questButton : questButtons) {
+			questButton.render(mouseX, mouseY, delta);
+		}
 	}
 
 	public void drawWrappedString(String text, int x, int y, int entryWidth, int color) {
@@ -74,9 +69,17 @@ public class SocialScreen extends Screen {
 	}
 
 	public static class SocialVillagerQuestButton extends ButtonWidget {
+		private Quest quest;
 
-		public SocialVillagerQuestButton(int x, int y, String text) {
-			super(x, y, 89, 20, text, ButtonWidget::onPress);
+		public SocialVillagerQuestButton(int x, int y, Quest quest) {
+			super(x, y, 89, 20, quest != null ? quest.name.getPath() : "", ButtonWidget::onPress);
+            setQuest(quest);
+		}
+
+		public void setQuest(Quest quest) {
+			this.quest = quest;
+			visible = quest != null;
+			setMessage(quest != null ? quest.name.getPath() : "");
 		}
 
 		@Override

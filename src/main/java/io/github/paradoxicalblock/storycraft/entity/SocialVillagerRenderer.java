@@ -21,9 +21,12 @@ import java.io.InputStream;
 
 @Environment(value=EnvType.CLIENT)
 public class SocialVillagerRenderer extends MobEntityRenderer<SocialVillager, PlayerEntityModel<SocialVillager>> {
-
 	public SocialVillagerRenderer(EntityRenderDispatcher dispatcher) {
-		super(dispatcher, new PlayerEntityModel<>(0.0F, true), 0.5F);
+		this(dispatcher, true);
+	}
+
+	public SocialVillagerRenderer(EntityRenderDispatcher dispatcher, boolean thinArms) {
+		super(dispatcher, new PlayerEntityModel<>(0.0F, thinArms), 0.5F);
 	}
 
 	@Override
@@ -32,7 +35,6 @@ public class SocialVillagerRenderer extends MobEntityRenderer<SocialVillager, Pl
 			return new Identifier("minecraft:dynamic/" + entity.getDataTracker().get(SocialVillager.serverUUID) + "_1");
 		}
 		SocialVillagerData socialVillagerData = entity.getSocialVillagerData();
-		this.model = new PlayerEntityModel<>(0.0F, socialVillagerData.getVillagerGender().getGender().equals("Female"));
 		BufferedImage imageBase = new TextureAssembler(socialVillagerData.getVillagerAspects(), socialVillagerData.getVillagerGender(), socialVillagerData.getVillagerProfession())
 				.createTexture();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();

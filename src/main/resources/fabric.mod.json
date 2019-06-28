@@ -18,9 +18,12 @@
       "io.github.paradoxicalblock.storycraft.main.StoryCraft"
     ],
     "client": [
-      "io.github.paradoxicalblock.storycraft.main.ClientInit"
+      "io.github.paradoxicalblock.storycraft.main.ClientCore"
     ]
   },
+  "mixins": [
+    "storycraft.mixins.json"
+  ],
 
   "requires": {
     "fabricloader": ">=0.4.0",
