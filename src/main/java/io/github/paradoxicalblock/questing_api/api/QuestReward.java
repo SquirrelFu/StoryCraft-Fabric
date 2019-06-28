@@ -4,19 +4,19 @@ import net.minecraft.item.ItemStack;
 
 public class QuestReward {
 
-    public ItemStack reward;
-    public int xpReward;
+    private ItemStack reward;
+    private int xpReward;
 
     public QuestReward(ItemStack reward, int xpReward) {
         this.reward = reward;
         this.xpReward = xpReward;
     }
 
-    public ItemStack getReward() {
+    public ItemStack getItemReward() {
         return reward;
     }
 
-    public int getXpReward() {
+    public int getXPReward() {
         return xpReward;
     }
 

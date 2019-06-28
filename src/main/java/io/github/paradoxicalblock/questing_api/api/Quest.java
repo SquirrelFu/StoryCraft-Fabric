@@ -6,8 +6,8 @@ import net.minecraft.util.Identifier;
 public class Quest {
 
     public Identifier name;
-    public ItemStack icon;
-    public QuestTask task;
+    private ItemStack icon;
+    private QuestTask task;
     public String profession;
 
     public Quest(Identifier name, ItemStack icon, QuestTask task, String profession) {

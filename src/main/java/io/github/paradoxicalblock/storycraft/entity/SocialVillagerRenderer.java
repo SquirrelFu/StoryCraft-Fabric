@@ -1,7 +1,6 @@
 package io.github.paradoxicalblock.storycraft.entity;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import io.github.paradoxicalblock.storycraft.socialVillager.SocialVillagerData;
 import io.github.paradoxicalblock.storycraft.util.TextureAssembler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -34,9 +33,7 @@ public class SocialVillagerRenderer extends MobEntityRenderer<SocialVillager, Pl
 		if (this.getRenderManager().textureManager.getTexture(new Identifier("minecraft:dynamic/" + entity.getDataTracker().get(SocialVillager.serverUUID) + "_1")) != null) {
 			return new Identifier("minecraft:dynamic/" + entity.getDataTracker().get(SocialVillager.serverUUID) + "_1");
 		}
-		SocialVillagerData socialVillagerData = entity.getSocialVillagerData();
-		BufferedImage imageBase = new TextureAssembler(socialVillagerData.getVillagerAspects(), socialVillagerData.getVillagerGender(), socialVillagerData.getVillagerProfession())
-				.createTexture();
+		BufferedImage imageBase = new TextureAssembler(entity).createTexture();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		try {
 			ImageIO.write(imageBase, "png", stream);

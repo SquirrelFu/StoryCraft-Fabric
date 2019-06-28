@@ -17,11 +17,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.apache.http.protocol.HTTP.USER_AGENT;
 
 public class Util {
-    private static final String RESOURCE_PREFIX = "assets/mca/";
+    private static final String RESOURCE_PREFIX = "assets/storycraft/";
 
     private Util() {
     }
@@ -35,8 +36,7 @@ public class Util {
      * @param z			Z coordinate
      * @return Integer representing the air block above the first non-air block given the provided ordered triples.
      */
-    public static int getSpawnSafeTopLevel(World world, int x, int y, int z)
-    {
+    public static int getSpawnSafeTopLevel(World world, int x, int y, int z) {
         Block block = Blocks.AIR;
         while (block == Blocks.AIR && y > 0) {
             y--;
@@ -46,12 +46,12 @@ public class Util {
         return y + 1;
     }
 
-    public static String readResource(String path) {
+    private static String readResource(String path) {
         String data;
         String location = RESOURCE_PREFIX + path;
 
         try {
-            data = IOUtils.toString(new InputStreamReader(StoryCraft.class.getClassLoader().getResourceAsStream(location)));
+            data = IOUtils.toString(new InputStreamReader(Objects.requireNonNull(StoryCraft.class.getClassLoader().getResourceAsStream(location))));
         } catch (IOException e) {
             throw new RuntimeException("Failed to read resource from JAR: " + location);
         }
@@ -61,8 +61,7 @@ public class Util {
 
     public static <T> T readResourceAsJSON(String path, Class<T> type) {
         Gson gson = new Gson();
-        T data = gson.fromJson(Util.readResource(path), type);
-        return data;
+        return gson.fromJson(Util.readResource(path), type);
     }
 
     public static List<BlockPos> getNearbyBlocks(BlockPos origin, World world, @Nullable Class filter, int xzDist, int yDist) {

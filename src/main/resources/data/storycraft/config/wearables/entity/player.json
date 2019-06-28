@@ -1,0 +1,9 @@
+{
+  "appliesTo": [ "minecraft:player" ],
+  "mergeStrategy": "COMBINE",
+  "slots": {
+    "head/banner": { "order": 100 },
+    "chest/banner": { "order": 100 },
+    "back/banner": { "order": -200 }
+  }
+}

@@ -31,12 +31,12 @@ repositories {
 	mavenCentral()
 	mavenLocal()
 	maven("https://maven.fabricmc.net")
+	maven("http://server.bbkr.space:8081/artifactory/libs-snapshot/")
+	maven("http://server.bbkr.space:8081/artifactory/libs-release/")
 	maven("https://minecraft.curseforge.com/api/maven")
     maven("http://maven.sargunv.s3-website-us-west-2.amazonaws.com/")
-	maven("http://server.bbkr.space:8081/artifactory/libs-snapshot/")
-	maven( "http://server.bbkr.space:8081/artifactory/libs-release/")
 	maven("https://maven.jamieswhiteshirt.com/libs-release/")
-	maven ("https://maven.abusedmaster.xyz")
+	maven("https://maven.abusedmaster.xyz")
 }
 
 dependencies {
@@ -61,6 +61,7 @@ dependencies {
 	modCompile(group = "shulkerboxtooltip", name = "shulkerboxtooltip", version = "1.3.0+1.14.2")
 	modCompile("miners-horizon:miners:horizon:1.5.0")
 	modCompile("leaf-decay:leaf:decay:1.0.3")
+	modApi("net.mcft.copy:Wearables:0.2.0")
 
 	compile(group="com.google.code.findbugs", name="jsr305", version="3.0.2")
 }

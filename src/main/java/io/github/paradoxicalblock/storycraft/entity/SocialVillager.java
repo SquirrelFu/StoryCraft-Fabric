@@ -347,27 +347,26 @@ public class SocialVillager extends PassiveEntity {
     @Override
     public void writeCustomDataToTag(CompoundTag tag) {
         super.writeCustomDataToTag(tag);
-        tag.putString("HairColor", hairColor);
-        tag.putString("EyeColor", eyeColor);
-        tag.putString("SkinColor", skinColor);
-        tag.putString("Sexuality", sexuality);
-        tag.putInt("HairStyle", hairStyle);
-        tag.putInt("Friendliness", friendliness);
-        tag.putInt("Bravery", bravery);
-        tag.putInt("Generosity", generosity);
-        tag.putBoolean("Apologized", apologized);
-        tag.putBoolean("Charmed", charmed);
-        tag.putString("FirstName", firstName);
-        tag.putString("LastName", lastName);
-        tag.putInt("Age", this.getBreedingAge());
-        tag.putString("Gender", gender);
-        tag.putString("Profession", profession);
-        tag.putBoolean("Sleeping", this.isSleeping());
+        tag.putString("hair_color", hairColor);
+        tag.putString("eye_color", eyeColor);
+        tag.putString("skin_color", skinColor);
+        tag.putString("sexuality", sexuality);
+        tag.putInt("hair_style", hairStyle);
+        tag.putInt("friendliness", friendliness);
+        tag.putInt("bravery", bravery);
+        tag.putInt("generosity", generosity);
+        tag.putBoolean("apologized", apologized);
+        tag.putBoolean("charmed", charmed);
+        tag.putString("first_name", firstName);
+        tag.putString("last_name", lastName);
+        tag.putInt("age", this.getBreedingAge());
+        tag.putString("gender", gender);
+        tag.putString("profession", profession);
         if (opinions.keySet().size() > 13) {
             for (UUID key : opinions.keySet()) {
                 CompoundTag opinionTag = new CompoundTag();
-                opinionTag.putUuid("Holder", key);
-                opinionTag.putInt("Opinion", opinions.get(key));
+                opinionTag.putUuid("holder", key);
+                opinionTag.putInt("opinion", opinions.get(key));
                 tag.put(key.toString(), opinionTag);
             }
         }
@@ -385,29 +384,6 @@ public class SocialVillager extends PassiveEntity {
     @Override
     public void readCustomDataFromTag(CompoundTag tag) {
         super.readCustomDataFromTag(tag);
-        this.hairColor = tag.getString("HairColor");
-        this.eyeColor = tag.getString("EyeColor");
-        this.skinColor = tag.getString("SkinColor");
-        this.sexuality = tag.getString("Sexuality");
-        this.hairStyle = tag.getInt("HairStyle");
-        this.friendliness = tag.getInt("Friendliness");
-        this.bravery = tag.getInt("Bravery");
-        this.generosity = tag.getInt("Generosity");
-        this.apologized = tag.getBoolean("Apologized");
-        this.charmed = tag.getBoolean("Charmed");
-        this.firstName = tag.getString("FirstName");
-        this.lastName = tag.getString("LastName");
-        this.gender = tag.getString("Gender");
-        this.profession = tag.getString("Profession");
-        for (String key : tag.getKeys()) {
-            if (tag.hasUuid(key)) {
-                this.opinions.put(tag.getCompound(key).getUuid("Holder"), tag.getInt("Opinion"));
-            }
-        }
-        if (hairColor == null || hairColor.equals("")) {
-            unifiedSetup();
-        }
-        this.setBreedingAge(tag.getInt("Age"));
         this.dataTracker.set(hairColorUnified, hairColor);
         this.dataTracker.set(eyeColorUnified, eyeColor);
         this.dataTracker.set(skinColorUnified, skinColor);
@@ -416,6 +392,22 @@ public class SocialVillager extends PassiveEntity {
         this.dataTracker.set(serverUUID, this.getUuidAsString());
         this.dataTracker.set(genderUnified, gender);
         this.dataTracker.set(professionUnified, profession);
+        this.friendliness = tag.getInt("friendliness");
+        this.bravery = tag.getInt("bravery");
+        this.generosity = tag.getInt("generosity");
+        this.apologized = tag.getBoolean("apologized");
+        this.charmed = tag.getBoolean("charmed");
+        this.firstName = tag.getString("first_name");
+        this.lastName = tag.getString("last_name");
+        for (String key : tag.getKeys()) {
+            if (tag.hasUuid(key)) {
+                this.opinions.put(tag.getCompound(key).getUuid("holder"), tag.getInt("opinion"));
+            }
+        }
+        if (hairColor == null || hairColor.equals("")) {
+            unifiedSetup();
+        }
+        this.setBreedingAge(tag.getInt("age"));
         this.setCanPickUpLoot(true);
         this.setSpecificGoals();
     }

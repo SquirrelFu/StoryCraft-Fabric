@@ -2,9 +2,9 @@ package io.github.paradoxicalblock.questing_api.api;
 
 public class QuestTask {
 
-    public String name;
-    public String description;
-    public QuestReward reward;
+    private String name;
+    private String description;
+    private QuestReward reward;
 
     public QuestTask(String name, String description, QuestReward reward) {
         this.name = name;

@@ -1,9 +1,7 @@
 package io.github.paradoxicalblock.storycraft.util;
 
+import io.github.paradoxicalblock.storycraft.entity.SocialVillager;
 import io.github.paradoxicalblock.storycraft.main.StoryCraft;
-import io.github.paradoxicalblock.storycraft.socialVillager.VillagerAspects;
-import io.github.paradoxicalblock.storycraft.socialVillager.VillagerGender;
-import io.github.paradoxicalblock.storycraft.socialVillager.VillagerProfession;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -13,6 +11,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.util.Objects;
+import java.util.Random;
 
 @Environment(value = EnvType.CLIENT)
 public class TextureAssembler {
@@ -31,7 +31,12 @@ public class TextureAssembler {
 
 	//Outfits
 	private Identifier outfit1Female = new Identifier(StoryCraft.MOD_ID, FEMALE_LOCATION + "/clothes/outfit1.png");
+	private Identifier outfit2Female = new Identifier(StoryCraft.MOD_ID, FEMALE_LOCATION + "/clothes/outfit2.png");
+	private Identifier outfit3Female = new Identifier(StoryCraft.MOD_ID, FEMALE_LOCATION + "/clothes/outfit3.png");
+
 	private Identifier outfit1Male = new Identifier(StoryCraft.MOD_ID, MALE_LOCATION + "/clothes/outfit1.png");
+	private Identifier outfit2Male = new Identifier(StoryCraft.MOD_ID, MALE_LOCATION + "/clothes/outfit2.png");
+	private Identifier outfit3Male = new Identifier(StoryCraft.MOD_ID, MALE_LOCATION + "/clothes/outfit3.png");
 
 	//Skin
 	private Identifier lightSkinMale = new Identifier(StoryCraft.MOD_ID, MALE_LOCATION + "/skin/light.png");
@@ -108,13 +113,13 @@ public class TextureAssembler {
 	private Identifier maleBlackmith1 = new Identifier(StoryCraft.MOD_ID, PROFESSION_LOCATION + "/male/blacksmith1.png");
 	private Identifier maleWarrior1 = new Identifier(StoryCraft.MOD_ID, PROFESSION_LOCATION + "/male/warrior1.png");
 
-	public TextureAssembler(VillagerAspects villagerAspects, VillagerGender villagerGender, VillagerProfession villagerProfession) {
-		this.eyeColor = villagerAspects.getEyeColor();
-		this.hairColor = villagerAspects.getHairColor();
-		this.skinColor = villagerAspects.getSkinColor();
-		this.hairstyle = villagerAspects.getHairStyle();
-		this.gender = villagerGender.getGender();
-		this.profession = villagerProfession.getProfession();
+	public TextureAssembler(SocialVillager socialVillager) {
+		this.eyeColor = socialVillager.getVillagerAspects().getEyeColor();
+		this.hairColor = socialVillager.getVillagerAspects().getHairColor();
+		this.skinColor = socialVillager.getVillagerAspects().getSkinColor();
+		this.hairstyle = socialVillager.getVillagerAspects().getHairStyle();
+		this.gender = socialVillager.getVillagerGender().getGender();
+		this.profession = socialVillager.getVillagerProfession().getProfession();
 	}
 
 	public BufferedImage createTexture() {
@@ -128,7 +133,19 @@ public class TextureAssembler {
 		try {
 			InputStream inputstream;
 			if (gender.equals("Male")) {
-				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(outfit1Male).getInputStream();
+				inputstream = null;
+				int random3 = new Random().nextInt(3);
+				switch (random3) {
+					case 0:
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(outfit1Male).getInputStream();
+						break;
+					case 1:
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(outfit2Male).getInputStream();
+						break;
+					case 2:
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(outfit3Male).getInputStream();
+						break;
+				}
 				outfitImage = ImageIO.read(inputstream);
 				inputstream.close();
 				switch (this.skinColor) {
@@ -249,8 +266,21 @@ public class TextureAssembler {
 				eyeImage = ImageIO.read(inputstream);
 				inputstream.close();
 			} else {
-				inputstream = MinecraftClient.getInstance().getResourceManager().getResource(outfit1Female).getInputStream();
-				outfitImage = ImageIO.read(inputstream);
+				inputstream = null;
+				int random3 = new Random().nextInt(3);
+				switch (random3) {
+					case 0:
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(outfit1Female).getInputStream();
+						break;
+					case 1:
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(outfit2Female).getInputStream();
+						break;
+					case 2:
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(outfit3Female).getInputStream();
+						break;
+				}
+				outfitImage = ImageIO.read(Objects.requireNonNull(inputstream));
+				inputstream.close();
 				switch (this.skinColor) {
 					case "Light":
 						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(lightSkinFemale).getInputStream();
@@ -381,7 +411,7 @@ public class TextureAssembler {
 			g.drawImage(eyeImage, 0, 0, null);
 			g.drawImage(outfitImage, 0, 0, null);
 			g.drawImage(hairImage, 0, 0, null);
-			g.drawImage(professionImage, 0, 0, null);
+//			g.drawImage(professionImage, 0, 0, null);
 			g.dispose();
 
 			return totalImage;

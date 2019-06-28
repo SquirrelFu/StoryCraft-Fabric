@@ -38,6 +38,11 @@ public class SocialScreen extends Screen {
 	}
 
 	@Override
+	public boolean isPauseScreen() {
+		return false;
+	}
+
+	@Override
 	public void render(int mouseX, int mouseY, float delta) {
 		this.renderBackground();
 		this.minecraft.getTextureManager().bindTexture(TEXTURE);
@@ -51,9 +56,26 @@ public class SocialScreen extends Screen {
 		String namePlusProfession = String.format("%s - %s", name, this.target.getVillagerProfession().getProfession());
 		this.font.draw(namePlusProfession, 211, 51, 4210752);
 
+		String questTitle = "Quests";
+		this.font.draw(questTitle, 100 + this.font.getStringWidth(questTitle), 51, 4210752);
+
 		for(SocialVillagerQuestButton questButton : questButtons) {
 			questButton.render(mouseX, mouseY, delta);
+
+			if (questButton.quest != null) {
+				String questName = String.format("Quest: %s", questButton.quest.getTask().getName());
+
+				this.font.draw(questName, 130 + this.font.getStringWidth(questName), 61, 4210752);
+
+				drawWrappedString(questButton.quest.getTask().getDescription(), 210, 71, 153, 4210752);
+			} else if (questButton.quest == null) {
+				String noQuests = "This villager has no quests";
+				this.font.draw(noQuests, 205, 101,4210752 );
+			} else {
+
+			}
 		}
+
 	}
 
 	public void drawWrappedString(String text, int x, int y, int entryWidth, int color) {
@@ -71,12 +93,12 @@ public class SocialScreen extends Screen {
 	public static class SocialVillagerQuestButton extends ButtonWidget {
 		private Quest quest;
 
-		public SocialVillagerQuestButton(int x, int y, Quest quest) {
+		SocialVillagerQuestButton(int x, int y, Quest quest) {
 			super(x, y, 89, 20, quest != null ? quest.name.getPath() : "", ButtonWidget::onPress);
             setQuest(quest);
 		}
 
-		public void setQuest(Quest quest) {
+		void setQuest(Quest quest) {
 			this.quest = quest;
 			visible = quest != null;
 			setMessage(quest != null ? quest.name.getPath() : "");
@@ -85,6 +107,7 @@ public class SocialScreen extends Screen {
 		@Override
 		public void onPress() {
 			super.onPress();
+			System.out.println(quest.name);
 		}
 
 	}
