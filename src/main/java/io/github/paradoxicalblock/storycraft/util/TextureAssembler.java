@@ -146,7 +146,7 @@ public class TextureAssembler {
 						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(outfit3Male).getInputStream();
 						break;
 				}
-				outfitImage = ImageIO.read(inputstream);
+				outfitImage = ImageIO.read(Objects.requireNonNull(inputstream));
 				inputstream.close();
 				switch (this.skinColor) {
 					case "Light":
@@ -411,7 +411,7 @@ public class TextureAssembler {
 			g.drawImage(eyeImage, 0, 0, null);
 			g.drawImage(outfitImage, 0, 0, null);
 			g.drawImage(hairImage, 0, 0, null);
-//			g.drawImage(professionImage, 0, 0, null);
+			g.drawImage(professionImage, 0, 0, null);
 			g.dispose();
 
 			return totalImage;

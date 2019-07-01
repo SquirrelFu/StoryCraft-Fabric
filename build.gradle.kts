@@ -52,6 +52,9 @@ dependencies {
     modCompile(group = "me.sargunvohra.mcmods", name = "auto-config", version = Dependencies.AutoConfig.version)
     include(group = "me.sargunvohra.mcmods", name = "auto-config", version = Dependencies.AutoConfig.version)
 
+	modCompile("abnormalib:AbnormaLib:0.7.4+1.14.3")
+	include("abnormalib:AbnormaLib:0.7.4+1.14.3")
+
 	// For dev env testing
 	modCompile("com.jamieswhiteshirt:developer-mode:1.0.12")
 	modCompile(group = "me.shedaniel", name = "RoughlyEnoughItems", version = Dependencies.REI.version)

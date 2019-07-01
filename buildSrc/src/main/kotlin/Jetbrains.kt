@@ -12,7 +12,7 @@ object Fabric {
     }
 
     object Yarn {
-        const val version = "build.1"
+        const val version = "build.9"
     }
 }
 
@@ -27,7 +27,7 @@ object Dependencies {
         const val version = "+"
     }
     object REI {
-        const val version = "2.9.4+build.128"
+        const val version = "2.9.6+build.138"
     }
 }
 
