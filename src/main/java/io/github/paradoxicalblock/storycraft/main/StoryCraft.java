@@ -1,5 +1,6 @@
 package io.github.paradoxicalblock.storycraft.main;
 
+import io.github.paradoxicalblock.QuestDataManager;
 import io.github.paradoxicalblock.questing_api.QuestManager;
 import io.github.paradoxicalblock.questing_api.api.Quest;
 import io.github.paradoxicalblock.questing_api.api.QuestReward;
@@ -23,10 +24,12 @@ public class StoryCraft implements ModInitializer {
 	public static final String MOD_ID = "storycraft";
 
 	public static EntityType<SocialVillager> SOCIAL_VILLAGER;
-	public static final Logger LOGGER = LogManager.getLogger("[StoryCraft]");
+	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+	public static final QuestDataManager QUEST_DATA_MANAGER = new QuestDataManager();
 
     @Override
     public void onInitialize() {
+    	QUEST_DATA_MANAGER.registerReloadListener();
 		IWearablesItemHandler.register(ShieldArmorHandler.INSTANCE);
 		SOCIAL_VILLAGER = EntityRegistryBuilder
 			.<SocialVillager>createBuilder("social_villager")

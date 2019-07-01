@@ -1,0 +1,22 @@
+{
+  "registry_name": "storycraft:testing",
+  "profession": "storycraft:baker",
+  "icon": "minecraft:cake",
+  "task": {
+    "name": "Testing",
+    "description": "This is a test quest",
+    "requirement": {
+      "stack": {
+        "item": "minecraft:iron_ore",
+        "count": 10
+      }
+    },
+    "reward": {
+      "stack": {
+        "item": "minecraft:cake",
+        "count": 2
+      },
+      "experience": 10
+    }
+  }
+}
