@@ -1,11 +1,11 @@
 {
-  "registry_name": "storycraft:baker_testing",
+  "registry_name": "storycraft:testing2",
   "profession": "Baker",
   "icon": {
     "item": "minecraft:cake"
   },
   "task": {
-    "name": "Testing",
+    "name": "Testing 2",
     "description": "This is a test quest",
     "requirement": {
       "stack": {

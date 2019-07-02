@@ -6,11 +6,13 @@ import io.github.paradoxicalblock.storycraft.entity.SocialVillager;
 import io.github.paradoxicalblock.storycraft.main.StoryCraft;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 import java.util.List;
 
@@ -62,15 +64,20 @@ public class SocialScreen extends Screen {
 		for(SocialVillagerQuestButton questButton : questButtons) {
 			questButton.render(mouseX, mouseY, delta);
 
-			if (questButton.quest != null) {
+			if (questButton.getQuest() != null) {
 				String questName = String.format("Quest: %s", questButton.quest.getTask().getName());
+				this.font.draw(questName, 140 + this.font.getStringWidth(questName), 65, 4210752);
 
-				this.font.draw(questName, 130 + this.font.getStringWidth(questName), 61, 4210752);
+				drawWrappedString(questButton.quest.getTask().getDescription(), 210, 80, 153, 4210752);
 
-				drawWrappedString(questButton.quest.getTask().getDescription(), 210, 71, 153, 4210752);
-			} else if (questButton.quest == null) {
+				ButtonWidget getRewardButton = new ButtonWidget(300, 130, 70, 20, "Get Reward", var1 -> {
+					System.out.println(Registry.ITEM.getId(questButton.quest.getTask().getReward().getItemReward().getItem()));
+					talker.giveItemStack(questButton.quest.getTask().getReward().getItemReward());
+				});
+				getRewardButton.render(mouseX, mouseY, delta);
+			} else if (questButton.getQuest() == null) {
 				String noQuests = "This villager has no quests";
-				this.font.draw(noQuests, 205, 101,4210752 );
+				this.font.draw(noQuests, 205, 101,4210752);
 			} else {
 
 			}
@@ -94,22 +101,26 @@ public class SocialScreen extends Screen {
 		private Quest quest;
 
 		SocialVillagerQuestButton(int x, int y, Quest quest) {
-			super(x, y, 89, 20, quest != null ? quest.name.getPath() : "", ButtonWidget::onPress);
+			super(x, y, 89, 20, quest != null ? quest.getTask().getName() : "", ButtonWidget::onPress);
             setQuest(quest);
 		}
 
 		void setQuest(Quest quest) {
 			this.quest = quest;
 			visible = quest != null;
-			setMessage(quest != null ? quest.name.getPath() : "");
+			setMessage(quest != null ? quest.getTask().getName() : "");
 		}
 
 		@Override
 		public void onPress() {
 			super.onPress();
-			System.out.println(quest.name);
+			playDownSound(MinecraftClient.getInstance().getSoundManager());
+			System.out.println(quest.getTask().getName());
 		}
 
+		public Quest getQuest() {
+			return quest;
+		}
 	}
 
 }

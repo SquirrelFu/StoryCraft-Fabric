@@ -1,21 +1,13 @@
 package io.github.paradoxicalblock.storycraft.main;
 
-import io.github.paradoxicalblock.QuestDataManager;
-import io.github.paradoxicalblock.questing_api.QuestManager;
-import io.github.paradoxicalblock.questing_api.api.Quest;
-import io.github.paradoxicalblock.questing_api.api.QuestReward;
-import io.github.paradoxicalblock.questing_api.api.QuestTask;
+import io.github.paradoxicalblock.questing_api.QuestDataManager;
 import io.github.paradoxicalblock.storycraft.entity.SocialVillager;
-import io.github.paradoxicalblock.storycraft.socialVillager.VillagerProfessions;
 import io.github.paradoxicalblock.storycraft.util.EntityRegistryBuilder;
 import net.fabricmc.api.ModInitializer;
 import net.mcft.copy.wearables.api.IWearablesItemHandler;
 import net.minecraft.entity.EntityCategory;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,9 +32,9 @@ public class StoryCraft implements ModInitializer {
 			.tracker(64, 3, false)
 			.build();
 
-		QuestManager.registerQuests(
+		/*QuestManager.registerQuests(
 				new Quest(
-						new Identifier(MOD_ID, "test"),
+						new Identifier(MOD_ID, "test").toString(),
 						new ItemStack(Items.CAKE),
 						new QuestTask("Testing", "This is a test",
 								new QuestReward(new ItemStack(Items.CAKE, 4), 10)
@@ -50,7 +42,7 @@ public class StoryCraft implements ModInitializer {
 						VillagerProfessions.BAKER.getProfession()
 				),
 				new Quest(
-						new Identifier(MOD_ID, "test2"),
+						new Identifier(MOD_ID, "test2").toString(),
 						new ItemStack(Items.CAKE),
 						new QuestTask("Testing 2", "This is a test",
 								new QuestReward(new ItemStack(Items.CAKE, 4), 10)
@@ -58,7 +50,7 @@ public class StoryCraft implements ModInitializer {
 						"Baker"
 				),
 				new Quest(
-						new Identifier(MOD_ID, "test3"),
+						new Identifier(MOD_ID, "test3").toString(),
 						new ItemStack(Items.CAKE),
 						new QuestTask("Testing 3", "This is a test",
 								new QuestReward(new ItemStack(Items.CAKE, 4), 10)
@@ -66,7 +58,7 @@ public class StoryCraft implements ModInitializer {
 						"Baker"
 				),
 				new Quest(
-						new Identifier(MOD_ID, "test4"),
+						new Identifier(MOD_ID, "test4").toString(),
 						new ItemStack(Items.CAKE),
 						new QuestTask("Testing 4", "This is a test",
 								new QuestReward(new ItemStack(Items.CAKE, 4), 10)
@@ -74,7 +66,7 @@ public class StoryCraft implements ModInitializer {
 						"Baker"
 				),
 				new Quest(
-						new Identifier(MOD_ID, "test5"),
+						new Identifier(MOD_ID, "test5").toString(),
 						new ItemStack(Items.CAKE),
 						new QuestTask("Testing 5", "This is a test",
 								new QuestReward(new ItemStack(Items.CAKE, 4), 10)
@@ -82,7 +74,7 @@ public class StoryCraft implements ModInitializer {
 						"Baker"
 				),
 				new Quest(
-						new Identifier(MOD_ID, "test6"),
+						new Identifier(MOD_ID, "test6").toString(),
 						new ItemStack(Items.CAKE),
 						new QuestTask("Testing 6", "This is a test",
 								new QuestReward(new ItemStack(Items.CAKE, 4), 10)
@@ -90,7 +82,7 @@ public class StoryCraft implements ModInitializer {
 						"Baker"
 				),
 				new Quest(
-						new Identifier(MOD_ID, "test7"),
+						new Identifier(MOD_ID, "test7").toString(),
 						new ItemStack(Items.CAKE),
 						new QuestTask("Testing 7", "This is a test",
 								new QuestReward(new ItemStack(Items.CAKE, 4), 10)
@@ -98,7 +90,7 @@ public class StoryCraft implements ModInitializer {
 						"Baker"
 				),
 				new Quest(
-						new Identifier(MOD_ID, "test8"),
+						new Identifier(MOD_ID, "test8").toString(),
 						new ItemStack(Items.CAKE),
 						new QuestTask("Testing 8", "This is a test",
 								new QuestReward(new ItemStack(Items.CAKE, 4), 10)
@@ -106,7 +98,7 @@ public class StoryCraft implements ModInitializer {
 						"Baker"
 				),
 				new Quest(
-						new Identifier(MOD_ID, "test9"),
+						new Identifier(MOD_ID, "test9").toString(),
 						new ItemStack(Items.CAKE),
 						new QuestTask("Testing 9", "This is a test",
 								new QuestReward(new ItemStack(Items.CAKE, 4), 10)
@@ -114,7 +106,7 @@ public class StoryCraft implements ModInitializer {
 						"Baker"
 				),
 				new Quest(
-						new Identifier(MOD_ID, "test10"),
+						new Identifier(MOD_ID, "test10").toString(),
 						new ItemStack(Items.CAKE),
 						new QuestTask("Testing 10", "This is a test",
 								new QuestReward(new ItemStack(Items.CAKE, 4), 10)
@@ -122,7 +114,7 @@ public class StoryCraft implements ModInitializer {
 						"Baker"
 				),
 				new Quest(
-						new Identifier(MOD_ID, "test11"),
+						new Identifier(MOD_ID, "test11").toString(),
 						new ItemStack(Items.CAKE),
 						new QuestTask("Testing 11", "This is a test",
 								new QuestReward(new ItemStack(Items.CAKE, 4), 10)
@@ -130,7 +122,7 @@ public class StoryCraft implements ModInitializer {
 						"Baker"
 				),
 				new Quest(
-						new Identifier(MOD_ID, "test12"),
+						new Identifier(MOD_ID, "test12").toString(),
 						new ItemStack(Items.CAKE),
 						new QuestTask("Testing 12", "This is a test",
 								new QuestReward(new ItemStack(Items.CAKE, 4), 10)
@@ -138,13 +130,13 @@ public class StoryCraft implements ModInitializer {
 						"Baker"
 				),
 				new Quest(
-						new Identifier(MOD_ID, "test13"),
+						new Identifier(MOD_ID, "test13").toString(),
 						new ItemStack(Items.CAKE),
 						new QuestTask("Testing 13", "This is a test",
 								new QuestReward(new ItemStack(Items.CAKE, 4), 10)
 						),
 						"Baker"
 				)
-		);
+		);*/
     }
 }

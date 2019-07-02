@@ -119,7 +119,7 @@ public class TextureAssembler {
 		this.skinColor = socialVillager.getVillagerAspects().getSkinColor();
 		this.hairstyle = socialVillager.getVillagerAspects().getHairStyle();
 		this.gender = socialVillager.getVillagerGender().getGender();
-		this.profession = socialVillager.getVillagerProfession().getProfession();
+		this.profession = socialVillager.get(SocialVillager.professionUnified);
 	}
 
 	public BufferedImage createTexture() {

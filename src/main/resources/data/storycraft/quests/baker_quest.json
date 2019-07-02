@@ -1,5 +1,5 @@
 {
-  "registry_name": "storycraft:baker_testing",
+  "registry_name": "storycraft:baker_test",
   "profession": "Baker",
   "icon": {
     "item": "minecraft:cake"

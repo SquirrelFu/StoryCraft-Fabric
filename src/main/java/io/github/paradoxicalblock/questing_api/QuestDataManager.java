@@ -1,15 +1,15 @@
-package io.github.paradoxicalblock;
+package io.github.paradoxicalblock.questing_api;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
-import io.github.paradoxicalblock.questing_api.QuestManager;
 import io.github.paradoxicalblock.questing_api.api.Quest;
 import io.github.paradoxicalblock.storycraft.main.StoryCraft;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
 import net.mcft.copy.wearables.WearablesCommon;
+import net.minecraft.item.ItemStack;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -45,7 +45,13 @@ public class QuestDataManager implements SimpleResourceReloadListener<QuestDataM
 
     public static class RawData {
 
-        private static final Gson GSON = new GsonBuilder().setPrettyPrinting().setLenient().create();
+        private static final Gson GSON = new GsonBuilder()
+                .setPrettyPrinting()
+                .enableComplexMapKeySerialization()
+//                .registerTypeAdapter(ItemStack.class, new ItemStackSerializer2())
+                .registerTypeAdapter(ItemStack.class, new ItemStackSerializer())
+                .setLenient()
+                .create();
 
         List<Quest> quests = new ArrayList<>();
 
@@ -67,7 +73,7 @@ public class QuestDataManager implements SimpleResourceReloadListener<QuestDataM
         public void apply() {
             for(Quest quest : this.quests) {
                 QuestManager.registerQuests(quest);
-                System.out.println(quest.name);
+                System.out.println(String.format("Registered a quest called %s for the profession %s", quest.getRegistryName(), quest.getProfession()));
             }
         }
 

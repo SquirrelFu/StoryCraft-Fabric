@@ -225,14 +225,14 @@ public class SocialVillager extends PassiveEntity {
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(hairColorUnified, hairColor);
-        this.dataTracker.startTracking(eyeColorUnified, eyeColor);
-        this.dataTracker.startTracking(skinColorUnified, skinColor);
-        this.dataTracker.startTracking(hairStyleUnified, hairStyle);
-        this.dataTracker.startTracking(orientationUnified, sexuality);
+        this.dataTracker.startTracking(hairColorUnified, "Brown");
+        this.dataTracker.startTracking(eyeColorUnified, "Black");
+        this.dataTracker.startTracking(skinColorUnified, "Light");
+        this.dataTracker.startTracking(hairStyleUnified, 1);
+        this.dataTracker.startTracking(orientationUnified, "Straight");
         this.dataTracker.startTracking(serverUUID, this.getUuidAsString());
-        this.dataTracker.startTracking(genderUnified, gender);
-        this.dataTracker.startTracking(professionUnified, profession);
+        this.dataTracker.startTracking(genderUnified, "Female");
+        this.dataTracker.startTracking(professionUnified, "Nomad");
     }
 
     public <T> T get(TrackedData<T> key) {

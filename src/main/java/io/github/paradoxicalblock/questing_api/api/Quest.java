@@ -1,24 +1,23 @@
 package io.github.paradoxicalblock.questing_api.api;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
 
 public class Quest {
 
-    public Identifier name;
+    public String registry_name;
+    public String profession;
     private ItemStack icon;
     private QuestTask task;
-    public String profession;
 
-    public Quest(Identifier name, ItemStack icon, QuestTask task, String profession) {
-        this.name = name;
+    public Quest(String registry_name, ItemStack icon, QuestTask task, String profession) {
+        this.registry_name = registry_name;
         this.icon = icon;
         this.task = task;
         this.profession = profession;
     }
 
-    public Identifier getName() {
-        return name;
+    public String getRegistryName() {
+        return registry_name;
     }
 
     public ItemStack getIcon() {
