@@ -13,10 +13,6 @@ public class VillagerProfession {
         setupProfession();
     }
 
-    VillagerProfession(String profession) {
-        this.profession = profession;
-    }
-
     private void setupProfession() {
         String[] professionList = {"Lumberjack", "Farmer", "Architect", "Blacksmith", "Enchanter", "Druid", "Butcher",
                 "Librarian", "Nomad", "Baker", "Priest", "Miner", "Guard", "Archer"};

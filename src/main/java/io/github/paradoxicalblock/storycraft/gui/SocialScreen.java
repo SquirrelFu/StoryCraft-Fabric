@@ -21,7 +21,7 @@ public class SocialScreen extends Screen {
 	private static final Identifier TEXTURE = new Identifier(StoryCraft.MOD_ID, "textures/gui/quest_villager.png");
 
 	private SocialVillager target;
-	private PlayerEntity talker;
+	private static PlayerEntity talker;
 
 	private SocialVillagerQuestButton[] questButtons;
 	private Quest[] quests;
@@ -29,7 +29,7 @@ public class SocialScreen extends Screen {
 	public SocialScreen(SocialVillager entity, PlayerEntity player) {
 		super(new TranslatableText("narrator.screen.title"));
 		this.target = entity;
-		this.talker = player;
+		talker = player;
 
 		quests = QuestManager.getQuests().stream().filter(quest -> quest.profession.equals(target.getVillagerProfession().getProfession())).toArray(Quest[]::new);
 		questButtons = new SocialVillagerQuestButton[7];
@@ -45,6 +45,14 @@ public class SocialScreen extends Screen {
 	}
 
 	@Override
+	public void init(MinecraftClient minecraftClient_1, int int_1, int int_2) {
+		super.init(minecraftClient_1, int_1, int_2);
+		for (SocialVillagerQuestButton questButton : questButtons) {
+			this.addButton(questButton);
+		}
+	}
+
+	@Override
 	public void render(int mouseX, int mouseY, float delta) {
 		this.renderBackground();
 		this.minecraft.getTextureManager().bindTexture(TEXTURE);
@@ -52,7 +60,7 @@ public class SocialScreen extends Screen {
 		blit(102, 44, this.blitOffset, 0.0F, 0.0F, 275, 166, 256, 512);
 
 		//blit(x, y, z, u, v, width, height, texHeight, texWidth)
-		blit(107, 62, this.blitOffset, 275.0F, 0.0F, 88, 80, 256, 512);
+//		blit(107, 62, this.blitOffset, 275.0F, 0.0F, 88, 80, 256, 512);
 
 		String name = String.format("%s %s", this.target.firstName, this.target.lastName);
 		String namePlusProfession = String.format("%s - %s", name, this.target.getVillagerProfession().getProfession());
@@ -113,9 +121,8 @@ public class SocialScreen extends Screen {
 
 		@Override
 		public void onPress() {
-			super.onPress();
-			playDownSound(MinecraftClient.getInstance().getSoundManager());
 			System.out.println(quest.getTask().getName());
+			SocialScreen.talker.giveItemStack(quest.getTask().getReward().getItemReward());
 		}
 
 		public Quest getQuest() {
