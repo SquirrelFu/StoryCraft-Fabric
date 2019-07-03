@@ -46,14 +46,23 @@ public class TextureAssembler {
 	private Identifier mediumSkinFemale = new Identifier(StoryCraft.MOD_ID, FEMALE_LOCATION + "/skin/medium.png");
 	private Identifier darkSkinFemale = new Identifier(StoryCraft.MOD_ID, FEMALE_LOCATION + "/skin/dark.png");
 
-	//Eyes
-	private Identifier blackEyes = new Identifier(StoryCraft.MOD_ID, SOCIAL_VILLAGER_LOCATION + "/eyes/black.png");
-	private Identifier blueEyes = new Identifier(StoryCraft.MOD_ID, SOCIAL_VILLAGER_LOCATION + "/eyes/blue.png");
-	private Identifier brownEyes = new Identifier(StoryCraft.MOD_ID, SOCIAL_VILLAGER_LOCATION + "/eyes/brown.png");
-	private Identifier greenEyes = new Identifier(StoryCraft.MOD_ID, SOCIAL_VILLAGER_LOCATION + "/eyes/green.png");
-	private Identifier limeEyes = new Identifier(StoryCraft.MOD_ID, SOCIAL_VILLAGER_LOCATION + "/eyes/lime.png");
-	private Identifier pinkEyes = new Identifier(StoryCraft.MOD_ID, SOCIAL_VILLAGER_LOCATION + "/eyes/pink.png");
-	private Identifier yellowEyes = new Identifier(StoryCraft.MOD_ID, SOCIAL_VILLAGER_LOCATION + "/eyes/yellow.png");
+	//Eyes Female
+	private Identifier blackEyesFemale = new Identifier(StoryCraft.MOD_ID, FEMALE_LOCATION + "/eyes/black.png");
+	private Identifier blueEyesFemale = new Identifier(StoryCraft.MOD_ID, FEMALE_LOCATION + "/eyes/blue.png");
+	private Identifier brownEyesFemale = new Identifier(StoryCraft.MOD_ID, FEMALE_LOCATION + "/eyes/brown.png");
+	private Identifier greenEyesFemale = new Identifier(StoryCraft.MOD_ID, FEMALE_LOCATION + "/eyes/green.png");
+	private Identifier limeEyesFemale = new Identifier(StoryCraft.MOD_ID, FEMALE_LOCATION + "/eyes/lime.png");
+	private Identifier pinkEyesFemale = new Identifier(StoryCraft.MOD_ID, FEMALE_LOCATION + "/eyes/pink.png");
+	private Identifier yellowEyesFemale = new Identifier(StoryCraft.MOD_ID, FEMALE_LOCATION + "/eyes/yellow.png");
+
+	//Eyes Male
+	private Identifier blackEyesMale = new Identifier(StoryCraft.MOD_ID, MALE_LOCATION + "/eyes/black.png");
+	private Identifier blueEyesMale = new Identifier(StoryCraft.MOD_ID, MALE_LOCATION + "/eyes/blue.png");
+	private Identifier brownEyesMale = new Identifier(StoryCraft.MOD_ID, MALE_LOCATION + "/eyes/brown.png");
+	private Identifier greenEyesMale = new Identifier(StoryCraft.MOD_ID, MALE_LOCATION + "/eyes/green.png");
+	private Identifier limeEyesMale = new Identifier(StoryCraft.MOD_ID, MALE_LOCATION + "/eyes/lime.png");
+	private Identifier pinkEyesMale = new Identifier(StoryCraft.MOD_ID, MALE_LOCATION + "/eyes/pink.png");
+	private Identifier yellowEyesMale = new Identifier(StoryCraft.MOD_ID, MALE_LOCATION + "/eyes/yellow.png");
 
 	//Hair male
 	private Identifier blackHairMale = new Identifier(StoryCraft.MOD_ID, MALE_LOCATION + "/hair/black1.png");
@@ -114,11 +123,11 @@ public class TextureAssembler {
 	private Identifier maleWarrior1 = new Identifier(StoryCraft.MOD_ID, PROFESSION_LOCATION + "/male/warrior1.png");
 
 	public TextureAssembler(SocialVillager socialVillager) {
-		this.eyeColor = socialVillager.getVillagerAspects().getEyeColor();
-		this.hairColor = socialVillager.getVillagerAspects().getHairColor();
-		this.skinColor = socialVillager.getVillagerAspects().getSkinColor();
-		this.hairstyle = socialVillager.getVillagerAspects().getHairStyle();
-		this.gender = socialVillager.getVillagerGender().getGender();
+		this.eyeColor = socialVillager.get(SocialVillager.eyeColorUnified);
+		this.hairColor = socialVillager.get(SocialVillager.hairColorUnified);
+		this.skinColor = socialVillager.get(SocialVillager.skinColorUnified);
+		this.hairstyle = socialVillager.get(SocialVillager.hairStyleUnified);
+		this.gender = socialVillager.get(SocialVillager.genderUnified);
 		this.profession = socialVillager.get(SocialVillager.professionUnified);
 	}
 
@@ -242,25 +251,25 @@ public class TextureAssembler {
 				inputstream.close();
 				switch (eyeColor) {
 					case "Black":
-						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blackEyes).getInputStream();
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blackEyesMale).getInputStream();
 						break;
 					case "Blue":
-						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blueEyes).getInputStream();
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blueEyesMale).getInputStream();
 						break;
 					case "Brown":
-						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(brownEyes).getInputStream();
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(brownEyesMale).getInputStream();
 						break;
 					case "Green":
-						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(greenEyes).getInputStream();
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(greenEyesMale).getInputStream();
 						break;
 					case "Lime":
-						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(limeEyes).getInputStream();
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(limeEyesMale).getInputStream();
 						break;
 					case "Pink":
-						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(pinkEyes).getInputStream();
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(pinkEyesMale).getInputStream();
 						break;
 					case "Yellow":
-						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(yellowEyes).getInputStream();
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(yellowEyesMale).getInputStream();
 						break;
 				}
 				eyeImage = ImageIO.read(inputstream);
@@ -381,25 +390,25 @@ public class TextureAssembler {
 				inputstream.close();
 				switch (eyeColor) {
 					case "Black":
-						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blackEyes).getInputStream();
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blackEyesFemale).getInputStream();
 						break;
 					case "Blue":
-						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blueEyes).getInputStream();
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(blueEyesFemale).getInputStream();
 						break;
 					case "Brown":
-						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(brownEyes).getInputStream();
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(brownEyesFemale).getInputStream();
 						break;
 					case "Green":
-						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(greenEyes).getInputStream();
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(greenEyesFemale).getInputStream();
 						break;
 					case "Lime":
-						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(limeEyes).getInputStream();
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(limeEyesFemale).getInputStream();
 						break;
 					case "Pink":
-						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(pinkEyes).getInputStream();
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(pinkEyesFemale).getInputStream();
 						break;
 					case "Yellow":
-						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(yellowEyes).getInputStream();
+						inputstream = MinecraftClient.getInstance().getResourceManager().getResource(yellowEyesFemale).getInputStream();
 						break;
 				}
 				eyeImage = ImageIO.read(inputstream);
