@@ -5,7 +5,6 @@ import io.github.paradoxicalblock.storycraft.entity.ai.goal.VillagerFarmGoal;
 import io.github.paradoxicalblock.storycraft.entity.ai.goal.VillagerStareGoal;
 import io.github.paradoxicalblock.storycraft.gui.SocialScreen;
 import io.github.paradoxicalblock.storycraft.main.StoryCraft;
-import io.github.paradoxicalblock.storycraft.socialVillager.SocialVillagerData;
 import io.github.paradoxicalblock.storycraft.socialVillager.VillagerAspects;
 import io.github.paradoxicalblock.storycraft.socialVillager.VillagerGender;
 import io.github.paradoxicalblock.storycraft.socialVillager.VillagerProfession;
@@ -73,7 +72,6 @@ public class SocialVillager extends PassiveEntity {
     private VillagerAspects villagerAspects = new VillagerAspects();
     private VillagerProfession villagerProfession = new VillagerProfession();
     private VillagerGender villagerGender = new VillagerGender();
-    private SocialVillagerData socialVillagerData = new SocialVillagerData(villagerAspects, villagerGender, villagerProfession);
 
     public SocialVillager(World world) {
         this(StoryCraft.SOCIAL_VILLAGER, world);
@@ -313,10 +311,6 @@ public class SocialVillager extends PassiveEntity {
 
     public VillagerGender getVillagerGender() {
         return villagerGender;
-    }
-
-    public SocialVillagerData getSocialVillagerData() {
-        return socialVillagerData;
     }
 
     @Environment(EnvType.CLIENT)

@@ -5,5 +5,6 @@ pluginManagement {
             name = "FabricMC"
         }
         gradlePluginPortal()
+        mavenLocal()
     }
 }

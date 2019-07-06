@@ -4,7 +4,7 @@ import net.fabricmc.loom.task.RemapSourcesJarTask
 plugins {
 	wrapper
 	idea
-	id("fabric-loom") version Fabric.Loom.version
+	id("moe.nikky.fabric-loom") version "0.2.6-SNAPSHOT"
 	id("maven-publish")
 	kotlin("jvm") version "1.3.21"
 }
@@ -39,32 +39,32 @@ repositories {
 	maven("https://maven.abusedmaster.xyz")
 }
 
+val loom = extensions.getByName("loom") as net.fabricmc.loom.LoomGradleExtension
+
 dependencies {
 	minecraft(group = "com.mojang", name = "minecraft", version = Minecraft.version)
 	mappings(group = "net.fabricmc", name = "yarn", version = "${Minecraft.version}+${Fabric.Yarn.version}")
-	modCompile(group = "net.fabricmc", name = "fabric-loader", version = Fabric.Loader.version)
+	fabricInstall(group = "net.fabricmc", name = "fabric-loader", version = Fabric.Loader.version)
 
-	modCompile(group = "net.fabricmc.fabric-api", name = "fabric-api", version = Fabric.API.version)
-	include(group = "net.fabricmc.fabric-api", name = "fabric-api", version = Fabric.API.version)
+	loom.deobf(api(group = "net.fabricmc.fabric-api", name = "fabric-api", version = Fabric.API.version))
 
-	modCompile(group = "cloth-config", name = "ClothConfig2", version = Dependencies.ClothConfig.version)
+	loom.deobf(api(group = "cloth-config", name = "ClothConfig2", version = Dependencies.ClothConfig.version))
     include(group = "cloth-config", name = "ClothConfig2", version = Dependencies.ClothConfig.version)
-    modCompile(group = "me.sargunvohra.mcmods", name = "auto-config", version = Dependencies.AutoConfig.version)
+	loom.deobf(api(group = "me.sargunvohra.mcmods", name = "auto-config", version = Dependencies.AutoConfig.version))
     include(group = "me.sargunvohra.mcmods", name = "auto-config", version = Dependencies.AutoConfig.version)
 
-	modCompile("abnormalib:AbnormaLib:0.7.4+1.14.3")
-	include("abnormalib:AbnormaLib:0.7.4+1.14.3")
+	loom.deobf(api(group = "abnormalib", name = "AbnormaLib", version = Dependencies.AbnormaLib.version))
+	include(group = "abnormalib", name = "AbnormaLib", version = Dependencies.AbnormaLib.version)
 
 	// For dev env testing
-	modCompile("com.jamieswhiteshirt:developer-mode:1.0.12")
-	modCompile(group = "me.shedaniel", name = "RoughlyEnoughItems", version = Dependencies.REI.version)
-	modCompile("informed-load-fabric:informedload:2.1.0:1.14")
-	modCompile("the-biome-overhaul:the-biome:overhaul:1.2.0")
-	modCompile(group = "io.github.prospector.modmenu", name = "ModMenu", version = Dependencies.ModMenu.version)
-	modCompile(group = "shulkerboxtooltip", name = "shulkerboxtooltip", version = "1.3.0+1.14.2")
-	modCompile("miners-horizon:miners:horizon:1.5.0")
-	modCompile("leaf-decay:leaf:decay:1.0.3")
-	modApi("net.mcft.copy:Wearables:0.2.0")
+	loom.deobf(api("com.jamieswhiteshirt:developer-mode:1.0.12"))
+	loom.deobf(api(group = "me.shedaniel", name = "RoughlyEnoughItems", version = Dependencies.REI.version))
+	loom.deobf(api("informed-load-fabric:informedload:2.1.0:1.14"))
+	loom.deobf(api("the-biome-overhaul:the-biome:overhaul:1.2.0"))
+	loom.deobf(api(group = "io.github.prospector.modmenu", name = "ModMenu", version = Dependencies.ModMenu.version))
+	loom.deobf(api(group = "shulkerboxtooltip", name = "shulkerboxtooltip", version = "1.3.0+1.14.2"))
+	loom.deobf(api("leaf-decay:leaf:decay:1.0.3"))
+	loom.deobf(api("net.mcft.copy:Wearables:0.2.0"))
 
 	compile(group="com.google.code.findbugs", name="jsr305", version="3.0.2")
 }

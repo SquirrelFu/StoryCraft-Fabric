@@ -122,12 +122,13 @@ public class SocialScreen extends Screen {
 		@Override
 		public void onPress() {
 			System.out.println(quest.getTask().getName());
-			SocialScreen.talker.giveItemStack(quest.getTask().getReward().getItemReward());
+
 		}
 
 		public Quest getQuest() {
 			return quest;
 		}
+
 	}
 
 }

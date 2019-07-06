@@ -16,7 +16,7 @@ public class VillagerProfession {
     private void setupProfession() {
         String[] professionList = {"Lumberjack", "Farmer", "Architect", "Blacksmith", "Enchanter", "Druid", "Butcher",
                 "Librarian", "Nomad", "Baker", "Priest", "Miner", "Guard", "Archer"};
-        if(random.nextInt(100) == 0)
+        if(random.nextInt(60) == 0)
             this.profession = "Mayor";
         this.profession = professionList[random.nextInt(professionList.length)];
     }

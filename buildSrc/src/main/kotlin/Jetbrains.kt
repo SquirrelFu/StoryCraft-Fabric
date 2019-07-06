@@ -8,11 +8,11 @@ object Fabric {
     }
 
     object Loom {
-        const val version = "0.2.4-SNAPSHOT"
+        const val version = "0.2.5-DEV"
     }
 
     object Yarn {
-        const val version = "build.12"
+        const val version = "build.2"
     }
 }
 
@@ -29,8 +29,11 @@ object Dependencies {
     object REI {
         const val version = "2.9.6+build.138"
     }
+    object AbnormaLib {
+        const val version = "0.7.4+1.14.3";
+    }
 }
 
 object Minecraft {
-    const val version = "1.14.3"
+    const val version = "1.14.4-pre2"
 }
