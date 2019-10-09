@@ -1,6 +1,6 @@
 package io.github.paradoxicalblock.storycraft.util;
 
-import io.github.paradoxicalblock.storycraft.socialVillager.VillagerProfession;
+import io.github.paradoxicalblock.storycraft.socialVillager.FamiliarsProfession;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
@@ -10,7 +10,7 @@ public class References {
 
     public static final UUID ZERO_UUID = new UUID(0, 0);
 
-    public static ItemStack getDefaultHeldItem(VillagerProfession profession) {
+    public static ItemStack getDefaultHeldItem(FamiliarsProfession profession) {
         switch (profession.getProfession()) {
             case "Guard":
                 return ItemStackCache.get(Items.DIAMOND_SWORD);

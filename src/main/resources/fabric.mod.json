@@ -19,6 +19,9 @@
     ],
     "client": [
       "io.github.paradoxicalblock.storycraft.main.ClientCore"
+    ],
+    "storycraft:quests": [
+      "io.github.paradoxicalblock.storycraft.quests.TestingQuest"
     ]
   },
   "mixins": [

@@ -3,11 +3,13 @@ package io.github.paradoxicalblock.storycraft.entity;
 import io.github.paradoxicalblock.storycraft.entity.ai.goal.FindDiamondBlockGoal;
 import io.github.paradoxicalblock.storycraft.entity.ai.goal.VillagerFarmGoal;
 import io.github.paradoxicalblock.storycraft.entity.ai.goal.VillagerStareGoal;
-import io.github.paradoxicalblock.storycraft.gui.SocialScreen;
+import io.github.paradoxicalblock.storycraft.gui.BaseScreen;
+import io.github.paradoxicalblock.storycraft.gui.FamiliarsScreen;
+import io.github.paradoxicalblock.storycraft.init.SCCustomTrackedData;
 import io.github.paradoxicalblock.storycraft.main.StoryCraft;
-import io.github.paradoxicalblock.storycraft.socialVillager.VillagerAspects;
-import io.github.paradoxicalblock.storycraft.socialVillager.VillagerGender;
-import io.github.paradoxicalblock.storycraft.socialVillager.VillagerProfession;
+import io.github.paradoxicalblock.storycraft.socialVillager.FamiliarsAspects;
+import io.github.paradoxicalblock.storycraft.socialVillager.FamiliarsGender;
+import io.github.paradoxicalblock.storycraft.socialVillager.FamiliarsProfession;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -15,6 +17,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.ai.pathing.MobNavigation;
+import net.minecraft.entity.attribute.ClampedEntityAttribute;
+import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -32,6 +36,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.io.IOException;
@@ -41,15 +46,30 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.UUID;
 
-public class SocialVillager extends PassiveEntity {
-    public static TrackedData<String> hairColorUnified = DataTracker.registerData(SocialVillager.class, TrackedDataHandlerRegistry.STRING);
-    public static TrackedData<String> eyeColorUnified = DataTracker.registerData(SocialVillager.class, TrackedDataHandlerRegistry.STRING);
-    public static TrackedData<String> skinColorUnified = DataTracker.registerData(SocialVillager.class, TrackedDataHandlerRegistry.STRING);
-    public static TrackedData<Integer> hairStyleUnified = DataTracker.registerData(SocialVillager.class, TrackedDataHandlerRegistry.INTEGER);
-    public static TrackedData<String> serverUUID = DataTracker.registerData(SocialVillager.class, TrackedDataHandlerRegistry.STRING);
-    public static TrackedData<String> genderUnified = DataTracker.registerData(SocialVillager.class, TrackedDataHandlerRegistry.STRING);
-    public static TrackedData<String> professionUnified = DataTracker.registerData(SocialVillager.class, TrackedDataHandlerRegistry.STRING);
-    private static TrackedData<String> orientationUnified = DataTracker.registerData(SocialVillager.class, TrackedDataHandlerRegistry.STRING);
+public class FamiliarsEntity extends PassiveEntity {
+    public static final EntityAttribute MAX_HUNGER = (new ClampedEntityAttribute(null, "generic.hunger", 100.0D, 0.0D, 100.0D)).setName("Hunger").setTracked(true);
+    public static final EntityAttribute MAX_HAPPY = (new ClampedEntityAttribute(null, "generic.happy", 100.0D, 0.0D, 100.0D)).setName("Happy").setTracked(true);
+    public static final EntityAttribute MAX_INTELLIGENCE = (new ClampedEntityAttribute(null, "generic.intelligence", 100.0D, 0.0D, 100.0D)).setName("Intelligence").setTracked(true);
+
+    private static final TrackedData<Integer> HUNGER = DataTracker.registerData(FamiliarsEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> HAPPY = DataTracker.registerData(FamiliarsEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> INTELLIGENCE = DataTracker.registerData(FamiliarsEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Boolean> SLEEPING = DataTracker.registerData(FamiliarsEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<ItemStack> ACTION_ITEM = DataTracker.registerData(FamiliarsEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
+
+    public static final TrackedData<FamiliarsAspects> ASPECTS = DataTracker.registerData(FamiliarsEntity.class, SCCustomTrackedData.ASPECTS);
+    public static final TrackedData<FamiliarsGender> GENDER = DataTracker.registerData(FamiliarsEntity.class, SCCustomTrackedData.GENDER);
+    public static final TrackedData<FamiliarsProfession> PROFESSION = DataTracker.registerData(FamiliarsEntity.class, SCCustomTrackedData.PROFESSION);
+
+    public static TrackedData<String> hairColorUnified = DataTracker.registerData(FamiliarsEntity.class, TrackedDataHandlerRegistry.STRING);
+    public static TrackedData<String> eyeColorUnified = DataTracker.registerData(FamiliarsEntity.class, TrackedDataHandlerRegistry.STRING);
+    public static TrackedData<String> skinColorUnified = DataTracker.registerData(FamiliarsEntity.class, TrackedDataHandlerRegistry.STRING);
+    public static TrackedData<Integer> hairStyleUnified = DataTracker.registerData(FamiliarsEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    public static TrackedData<String> serverUUID = DataTracker.registerData(FamiliarsEntity.class, TrackedDataHandlerRegistry.STRING);
+    public static TrackedData<String> genderUnified = DataTracker.registerData(FamiliarsEntity.class, TrackedDataHandlerRegistry.STRING);
+    public static TrackedData<String> professionUnified = DataTracker.registerData(FamiliarsEntity.class, TrackedDataHandlerRegistry.STRING);
+    private static TrackedData<String> orientationUnified = DataTracker.registerData(FamiliarsEntity.class, TrackedDataHandlerRegistry.STRING);
+    private final BasicInventory inventory = new BasicInventory(8);
     public String firstName;
     public String lastName;
     private HashMap<UUID, Integer> opinions = new HashMap<>();
@@ -65,19 +85,34 @@ public class SocialVillager extends PassiveEntity {
     private int generosity = 0;
     private boolean apologized = false;
     private boolean charmed = false;
-    private final BasicInventory inventory = new BasicInventory(8);
     private boolean goalsSet;
     private boolean staring;
+    private boolean working;
+    private boolean sleeping;
 
-    private VillagerAspects villagerAspects = new VillagerAspects();
-    private VillagerProfession villagerProfession = new VillagerProfession();
-    private VillagerGender villagerGender = new VillagerGender();
+    public static int SLEEP_DURATION = 8000;
+    public static int SLEEP_START_TIME = 16000;
+    public static int SLEEP_END_TIME = SLEEP_START_TIME + SLEEP_DURATION;
+    public static int WORK_START_TIME = 500;
+    public static int WORK_END_TIME = 11500;
+    private static int[] recentEatPenalties = {2, 0, -3, -7, -12, -18};
 
-    public SocialVillager(World world) {
+    protected BlockPos bedPos = null;
+    protected BlockPos homeFrame = null;
+    protected int sleepOffset = 0;
+    protected int lastSadTick = 0;
+    protected int lastSadThrottle = 200;
+    protected int daysAlive = 0;
+
+    private FamiliarsAspects familiarsAspects = new FamiliarsAspects(this);
+    private FamiliarsProfession familiarsProfession = new FamiliarsProfession();
+    private FamiliarsGender familiarsGender = new FamiliarsGender();
+
+    public FamiliarsEntity(World world) {
         this(StoryCraft.SOCIAL_VILLAGER, world);
     }
 
-    private SocialVillager(EntityType<? extends PassiveEntity> type, World world) {
+    private FamiliarsEntity(EntityType<? extends PassiveEntity> type, World world) {
         super(type, world);
         ((MobNavigation) this.getNavigation()).setCanPathThroughDoors(true);
         this.setCanPickUpLoot(true);
@@ -94,7 +129,7 @@ public class SocialVillager extends PassiveEntity {
         }
 
         try {
-            this.firstName = generateFirstName(this.gender);
+            this.firstName = generateFirstName(this.get(genderUnified));
             this.lastName = generateLastName();
             this.setCustomName(new LiteralText(firstName + " " + lastName));
 
@@ -125,9 +160,9 @@ public class SocialVillager extends PassiveEntity {
             this.goalsSet = true;
             if (this.isBaby()) {
                 this.goalSelector.add(8, new VillagerStareGoal(this, 0.32D));
-            } else if (this.profession.equals("Farmer")) {
+            } else if (this.get(professionUnified).equals("Farmer")) {
                 this.goalSelector.add(6, new VillagerFarmGoal(this, 0.6D));
-            } else if (this.profession.equals("Guard")) {
+            } else if (this.get(professionUnified).equals("Guard")) {
                 this.goalSelector.add(1, new MeleeAttackGoal(this, 1.0D, true));
                 this.goalSelector.add(2, new GoToEntityTargetGoal(this, 0.9D, 32.0F));
                 this.goalSelector.add(2, new WanderAroundPointOfInterestGoal(this, 0.6D));
@@ -163,12 +198,31 @@ public class SocialVillager extends PassiveEntity {
         super.onGrowUp();
     }
 
+    public boolean isStaring() {
+        return this.staring;
+    }
+
     public void setStaring(boolean boolean_1) {
         this.staring = boolean_1;
     }
 
-    public boolean isStaring() {
-        return this.staring;
+    public boolean isWorking() {
+        return working;
+    }
+
+    public FamiliarsEntity setWorking(boolean working) {
+        this.working = working;
+        return this;
+    }
+
+    @Override
+    public boolean isSleeping() {
+        return sleeping;
+    }
+
+    public FamiliarsEntity setSleeping(boolean sleeping) {
+        this.sleeping = sleeping;
+        return this;
     }
 
     @Override
@@ -193,7 +247,7 @@ public class SocialVillager extends PassiveEntity {
     private boolean hasEnoughFood(int int_1) {
         boolean boolean_1 = this.profession.equals("Farmer");
 
-        for(int int_2 = 0; int_2 < this.getInventory().getInvSize(); ++int_2) {
+        for (int int_2 = 0; int_2 < this.getInventory().getInvSize(); ++int_2) {
             ItemStack itemStack_1 = this.getInventory().getInvStack(int_2);
             Item item_1 = itemStack_1.getItem();
             int int_3 = itemStack_1.getCount();
@@ -210,7 +264,7 @@ public class SocialVillager extends PassiveEntity {
     }
 
     public boolean hasSeed() {
-        for(int int_1 = 0; int_1 < this.getInventory().getInvSize(); ++int_1) {
+        for (int int_1 = 0; int_1 < this.getInventory().getInvSize(); ++int_1) {
             Item item_1 = this.getInventory().getInvStack(int_1).getItem();
             if (item_1 == Items.WHEAT_SEEDS || item_1 == Items.POTATO || item_1 == Items.CARROT || item_1 == Items.BEETROOT_SEEDS) {
                 return true;
@@ -268,49 +322,42 @@ public class SocialVillager extends PassiveEntity {
         if (!opinions.containsKey(player.getUuid())) {
             formOpinion(player);
         }
-        MinecraftClient.getInstance().openScreen(new SocialScreen(this, player));
+//        MinecraftClient.getInstance().openScreen(new SocialScreen(this, player));
+        MinecraftClient.getInstance().openScreen(new BaseScreen(new FamiliarsScreen(this, player)));
         return true;
     }
 
     private void setupHair() {
-        this.hairStyle = villagerAspects.getHairStyle();
-        this.hairColor = villagerAspects.getHairColor();
+        this.hairStyle = familiarsAspects.getHairStyle();
+        this.hairColor = familiarsAspects.getHairColor();
     }
 
     private void setupEyes() {
-        this.eyeColor = villagerAspects.getEyeColor();
+        this.eyeColor = familiarsAspects.getEyeColor();
     }
 
     private void setupSkin() {
-        this.skinColor = villagerAspects.getSkinColor();
+        this.skinColor = familiarsAspects.getSkinColor();
     }
 
     private void setupGender() {
-        this.gender = villagerGender.getGender();
+        this.gender = familiarsGender.getGender();
     }
 
     private void setupProfession() {
-        this.profession = villagerProfession.getProfession();
+        this.profession = familiarsProfession.getProfession();
     }
 
     private void setupOrientation() {
-        this.sexuality = villagerAspects.getSexuality();
+        this.sexuality = familiarsAspects.getSexuality();
     }
 
     public boolean canImmediatelyDespawn(double double_1) {
         return false;
     }
 
-    public VillagerAspects getVillagerAspects() {
-        return villagerAspects;
-    }
-
-    public VillagerProfession getVillagerProfession() {
-        return villagerProfession;
-    }
-
-    public VillagerGender getVillagerGender() {
-        return villagerGender;
+    public FamiliarsProfession getFamiliarsProfession() {
+        return familiarsProfession;
     }
 
     @Environment(EnvType.CLIENT)
@@ -356,6 +403,8 @@ public class SocialVillager extends PassiveEntity {
         tag.putInt("age", this.getBreedingAge());
         tag.putString("gender", gender);
         tag.putString("profession", profession);
+        tag.putBoolean("working", working);
+        tag.putBoolean("sleeping", sleeping);
         if (opinions.keySet().size() > 13) {
             for (UUID key : opinions.keySet()) {
                 CompoundTag opinionTag = new CompoundTag();
@@ -367,10 +416,10 @@ public class SocialVillager extends PassiveEntity {
     }
 
     private void unifiedSetup() {
+        this.setupGender();
+        this.setupSkin();
         this.setupEyes();
         this.setupHair();
-        this.setupSkin();
-        this.setupGender();
         this.setupOrientation();
         this.setupProfession();
     }
@@ -393,6 +442,8 @@ public class SocialVillager extends PassiveEntity {
         this.charmed = tag.getBoolean("charmed");
         this.firstName = tag.getString("first_name");
         this.lastName = tag.getString("last_name");
+        this.working = tag.getBoolean("working");
+        this.sleeping = tag.getBoolean("sleeping");
         for (String key : tag.getKeys()) {
             if (tag.hasUuid(key)) {
                 this.opinions.put(tag.getCompound(key).getUuid("holder"), tag.getInt("opinion"));
@@ -408,7 +459,7 @@ public class SocialVillager extends PassiveEntity {
 
     @Override
     public PassiveEntity createChild(PassiveEntity var1) {
-        return new SocialVillager(StoryCraft.SOCIAL_VILLAGER, this.world);
+        return new FamiliarsEntity(StoryCraft.SOCIAL_VILLAGER, this.world);
     }
 
     private String generateFirstName(String gender) throws IOException {
@@ -460,6 +511,64 @@ public class SocialVillager extends PassiveEntity {
         stream.close();
         scanner.close();
         return lastNameOut;
+    }
+
+    public enum MovementMode {
+        WALK((byte) 1, 1.0F),
+        SKIP((byte) 2, 1.1F),
+        RUN((byte) 3, 1.4F),
+        SULK((byte) 4, 0.7F);
+
+        public float speedMult;
+        public byte id;
+
+        MovementMode(byte id, float mult) {
+            this.speedMult = mult;
+            this.id = id;
+        }
+    }
+
+    public enum VillagerThought {
+        BED(115, "red_bed.png"),
+        HUNGRY(116, "food.png"),
+        PICK(117, "iron_pick.png"),
+        HOE(118, "iron_hoe.png"),
+        AXE(119, "iron_axe.png"),
+        SWORD(120, "iron_sword.png"),
+        BOOKSHELF(121, "bookshelf.png"),
+        PIG_FOOD(122, "pig_carrot.png"),
+        SHEEP_FOOD(123, "sheep_wheat.png"),
+        COW_FOOD(124, "cow_wheat.png"),
+        CHICKEN_FOOD(125, "chicken_seeds.png"),
+        BUCKET(126, "bucket.png"),
+        SHEARS(127, "shears.png"),
+        TAVERN(128, "structure_tavern.png"),
+        NOTEBLOCK(129, "noteblock.png"),
+        TEACHER(130, "prof_teacher.png"),
+        TORCH(131, "torch.png"),
+        INSOMNIA(132, "insomnia.png"),
+        CROWDED(133, "crowded.png"),
+        DO_NOT_USE(999, "meh.png");
+
+        private int numVal;
+        private String texture;
+
+        VillagerThought(int val, String tex) {
+            this.numVal = val;
+            this.texture = tex;
+        }
+
+        public int getVal() {
+            return this.numVal;
+        }
+
+        public String getTex() {
+            return this.texture;
+        }
+
+        public float getScale() {
+            return 1.0F;
+        }
     }
 
 }

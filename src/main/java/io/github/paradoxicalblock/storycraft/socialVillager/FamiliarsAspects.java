@@ -1,9 +1,11 @@
 package io.github.paradoxicalblock.storycraft.socialVillager;
 
+import io.github.paradoxicalblock.storycraft.entity.FamiliarsEntity;
+
 import java.util.Random;
 
 //Handles anything related to the appearance of the social villager
-public class VillagerAspects {
+public class FamiliarsAspects {
 
     private static Random random = new Random();
 
@@ -13,18 +15,34 @@ public class VillagerAspects {
     private String sexuality;
     private int hairStyle = 0;
 
-    public VillagerAspects() {
+    private FamiliarsEntity familiarsEntity;
+
+    public FamiliarsAspects(FamiliarsEntity familiarsEntity) {
+        this.familiarsEntity = familiarsEntity;
         setupHair();
         setupSkin();
         setupEyes();
         setupOrientation();
     }
 
+    public FamiliarsAspects(String hairColor, String eyeColor, String skinColor, String sexuality, int hairStyle) {
+        this.hairColor = hairColor;
+        this.eyeColor = eyeColor;
+        this.skinColor = skinColor;
+        this.sexuality = sexuality;
+        this.hairStyle = hairStyle;
+    }
+
     private void setupHair() {
-        String[] hairList = {"Red", "Brown", "Black", "Blonde"};
+        String[] maleHairList = {"Red", "Brown", "Black", "Blonde"};
+        String[] femaleHairStyle = {"Red", "Brown", "Black", "Blonde", "Pink", "Ginger"};
         int[] styleList = {1, 2, 3, 4};
         this.hairStyle = styleList[random.nextInt(styleList.length)];
-        this.hairColor = hairList[random.nextInt(hairList.length)];
+        if (familiarsEntity.get(FamiliarsEntity.genderUnified).equals("Female")) {
+            this.hairColor = femaleHairStyle[random.nextInt(femaleHairStyle.length)];
+        } else {
+            this.hairColor = maleHairList[random.nextInt(maleHairList.length)];
+        }
     }
 
     private void setupEyes() {
@@ -44,7 +62,11 @@ public class VillagerAspects {
             if (orientationBool) {
                 this.sexuality = "Bisexual";
             } else {
-                this.sexuality = "Gay";
+                if (familiarsEntity.get(FamiliarsEntity.genderUnified).equals("Female")) {
+                    this.sexuality = "Lesbian";
+                } else {
+                    this.sexuality = "Gay";
+                }
             }
         } else {
             this.sexuality = "Straight";

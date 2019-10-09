@@ -30,10 +30,10 @@ public class Util {
     /**
      * Finds a y position given an x,y,z coordinate triple that is assumed to be the world's "ground".
      *
-     * @param world	The world in which blocks will be tested
-     * @param x			X coordinate
-     * @param y			Y coordinate, used as the starting height for finding ground.
-     * @param z			Z coordinate
+     * @param world The world in which blocks will be tested
+     * @param x     X coordinate
+     * @param y     Y coordinate, used as the starting height for finding ground.
+     * @param z     Z coordinate
      * @return Integer representing the air block above the first non-air block given the provided ordered triples.
      */
     public static int getSpawnSafeTopLevel(World world, int x, int y, int z) {

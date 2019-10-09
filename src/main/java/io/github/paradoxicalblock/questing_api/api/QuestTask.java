@@ -4,13 +4,11 @@ public class QuestTask {
 
     private String name;
     private String description;
-    private QuestReward reward;
     private int currentProgress, maxProgress;
 
-    public QuestTask(String name, String description, QuestReward reward) {
+    public QuestTask(String name, String description) {
         this.name = name;
         this.description = description;
-        this.reward = reward;
     }
 
     public String getName() {
@@ -19,10 +17,6 @@ public class QuestTask {
 
     public String getDescription() {
         return description;
-    }
-
-    public QuestReward getReward() {
-        return reward;
     }
 
     public int getCurrentProgress() {

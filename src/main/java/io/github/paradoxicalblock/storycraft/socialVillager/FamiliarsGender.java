@@ -3,14 +3,18 @@ package io.github.paradoxicalblock.storycraft.socialVillager;
 import java.util.Random;
 
 //Handles anything related to the gender of the social villager
-public class VillagerGender {
+public class FamiliarsGender {
 
     private static Random random = new Random();
 
     private String gender;
 
-    public VillagerGender() {
+    public FamiliarsGender() {
         setupGender();
+    }
+
+    public FamiliarsGender(String gender) {
+        this.gender = gender;
     }
 
     private void setupGender() {

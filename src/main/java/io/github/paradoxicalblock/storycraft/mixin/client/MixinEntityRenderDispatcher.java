@@ -1,6 +1,6 @@
 package io.github.paradoxicalblock.storycraft.mixin.client;
 
-import io.github.paradoxicalblock.storycraft.entity.SocialVillager;
+import io.github.paradoxicalblock.storycraft.entity.FamiliarsEntity;
 import io.github.paradoxicalblock.storycraft.main.ClientCore;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRenderer;
@@ -16,16 +16,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EntityRenderDispatcher.class)
 public class MixinEntityRenderDispatcher {
-	@Inject(method = "<init>", at = @At("RETURN"))
-	public void onConstruct(TextureManager textureManager, ItemRenderer itemRenderer, ReloadableResourceManager reloadableResourceManager, CallbackInfo callbackInfo) {
-		ClientCore.addSocialVillagerRenderers((EntityRenderDispatcher)(Object) this);
-	}
+    @Inject(method = "<init>", at = @At("RETURN"))
+    public void onConstruct(TextureManager textureManager, ItemRenderer itemRenderer, ReloadableResourceManager reloadableResourceManager, CallbackInfo callbackInfo) {
+        ClientCore.addFamiliarsEntityRenderers((EntityRenderDispatcher) (Object) this);
+    }
 
-	@Inject(method = "getRenderer(Lnet/minecraft/entity/Entity;)Lnet/minecraft/client/render/entity/EntityRenderer;", at = @At("TAIL"), cancellable = true)
-	public void getRenderer(Entity entity, CallbackInfoReturnable<EntityRenderer> callbackInfoReturnable) {
-		if(entity instanceof SocialVillager) {
-            callbackInfoReturnable.setReturnValue(ClientCore.socialVillagerRendererMap.get(((SocialVillager) entity).getVillagerGender().getGender()));
-		}
-	}
+    @Inject(method = "getRenderer(Lnet/minecraft/entity/Entity;)Lnet/minecraft/client/render/entity/EntityRenderer;", at = @At("TAIL"), cancellable = true)
+    public void getRenderer(Entity entity, CallbackInfoReturnable<EntityRenderer> callbackInfoReturnable) {
+        if (entity instanceof FamiliarsEntity) {
+            callbackInfoReturnable.setReturnValue(ClientCore.familiarsEntityRendererMap.get(((FamiliarsEntity) entity).get(FamiliarsEntity.genderUnified)));
+        }
+    }
 
 }

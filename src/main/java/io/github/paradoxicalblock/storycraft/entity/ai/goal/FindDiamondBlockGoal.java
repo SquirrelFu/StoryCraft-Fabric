@@ -1,6 +1,6 @@
 package io.github.paradoxicalblock.storycraft.entity.ai.goal;
 
-import io.github.paradoxicalblock.storycraft.entity.SocialVillager;
+import io.github.paradoxicalblock.storycraft.entity.FamiliarsEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.OreBlock;
 import net.minecraft.entity.EquipmentSlot;
@@ -16,12 +16,12 @@ import net.minecraft.world.World;
 
 public class FindDiamondBlockGoal extends MoveToTargetPosGoal {
 
-    private final SocialVillager owner;
-    private int timer;
+    private final FamiliarsEntity owner;
     protected int breakProgress;
     protected int prevBreakProgress;
+    private int timer;
 
-    public FindDiamondBlockGoal(SocialVillager villagerEntity_1, double double_1) {
+    public FindDiamondBlockGoal(FamiliarsEntity villagerEntity_1, double double_1) {
         super(villagerEntity_1, double_1, 16);
         this.owner = villagerEntity_1;
         this.prevBreakProgress = -1;

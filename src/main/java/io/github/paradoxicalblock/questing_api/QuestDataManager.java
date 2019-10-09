@@ -8,7 +8,6 @@ import io.github.paradoxicalblock.questing_api.api.Quest;
 import io.github.paradoxicalblock.storycraft.main.StoryCraft;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
-import net.mcft.copy.wearables.WearablesCommon;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
@@ -48,7 +47,6 @@ public class QuestDataManager implements SimpleResourceReloadListener<QuestDataM
         private static final Gson GSON = new GsonBuilder()
                 .setPrettyPrinting()
                 .enableComplexMapKeySerialization()
-//                .registerTypeAdapter(ItemStack.class, new ItemStackSerializer2())
                 .registerTypeAdapter(ItemStack.class, new ItemStackSerializer())
                 .setLenient()
                 .create();
@@ -61,18 +59,18 @@ public class QuestDataManager implements SimpleResourceReloadListener<QuestDataM
                     InputStreamReader reader = new InputStreamReader(manager.getResource(id).getInputStream());
                     quests.add(GSON.fromJson(reader, Quest.class));
                 } catch (JsonIOException | JsonSyntaxException ex) {
-                    WearablesCommon.LOGGER.error("[StoryCraft:QuestDataManager] Error while parsing resource '{}'", id, ex);
+                    StoryCraft.LOGGER.error("[StoryCraft:QuestDataManager] Error while parsing resource '{}'", id, ex);
                 } catch (IOException ex) {
-                    WearablesCommon.LOGGER.error("[StoryCraft:QuestDataManager] Error reading resource '{}'", id, ex);
+                    StoryCraft.LOGGER.error("[StoryCraft:QuestDataManager] Error reading resource '{}'", id, ex);
                 } catch (Exception ex) {
-                    WearablesCommon.LOGGER.error("[StoryCraft:QuestDataManager] Error loading resource '{}'", id, ex);
+                    StoryCraft.LOGGER.error("[StoryCraft:QuestDataManager] Error loading resource '{}'", id, ex);
                 }
             }
         }
 
         public void apply() {
             for(Quest quest : this.quests) {
-                QuestManager.registerQuests(quest);
+                QuestManager.registerQuest(quest);
                 System.out.println(String.format("Registered a quest called %s for the profession %s", quest.getRegistryName(), quest.getProfession()));
             }
         }

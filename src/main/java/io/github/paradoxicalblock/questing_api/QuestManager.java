@@ -2,20 +2,21 @@ package io.github.paradoxicalblock.questing_api;
 
 import io.github.paradoxicalblock.questing_api.api.Quest;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.ArrayList;
+import java.util.List;
 
 public class QuestManager {
 
-    private static Collection<Quest> quests = new ConcurrentLinkedQueue<>();
+    private static List<Quest> QUESTS = new ArrayList<>();
 
-    public static void registerQuests(Quest... quests) {
-        QuestManager.quests.addAll(Arrays.asList(quests));
+    public static void registerQuest(Quest quest) {
+        if(!QUESTS.contains(quest)) {
+            QuestManager.QUESTS.add(quest);
+        }
     }
 
-    public static Collection<Quest> getQuests() {
-        return quests;
+    public static List<Quest> getQuests() {
+        return QUESTS;
     }
 
 }
