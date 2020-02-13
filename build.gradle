@@ -1,6 +1,8 @@
 plugins {
-	id 'fabric-loom' version '0.2.5-SNAPSHOT'
-	id 'maven-publish'
+    id 'fabric-loom' version '0.2.6-SNAPSHOT'
+    id 'maven-publish'
+    id "com.matthewprenger.cursegradle" version "1.4.0"
+    id "com.wynprice.cursemaven" version "2.1.0"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -14,89 +16,93 @@ minecraft {
 }
 
 repositories {
-	mavenCentral()
-	mavenLocal()
-	maven{ url="https://minecraft.curseforge.com/api/maven" }
-	maven{ url="http://maven.modmuss50.me" }
-	maven{ url="https://maven.fabricmc.net" }
-	maven{ url="https://jitpack.io" }
-	maven{ url="http://maven.sargunv.s3-website-us-west-2.amazonaws.com/" }
-	//maven{ url="http://server.bbkr.space:8081/artifactory/libs-snapshot/" } //shouldn't need snapshot repo any more
-	maven{ url="http://server.bbkr.space:8081/artifactory/libs-release/" }
-	maven{ url="https://maven.swordglowsblue.com/" }
-	maven{ url="https://maven.jamieswhiteshirt.com/libs-release/" }
+    mavenCentral()
+    mavenLocal()
+    maven{ url="https://minecraft.curseforge.com/api/maven" }
+    maven{ url="http://maven.modmuss50.me" }
+    maven{ url="https://maven.fabricmc.net" }
+    maven{ url="https://jitpack.io" }
+    maven{ url="http://maven.sargunv.s3-website-us-west-2.amazonaws.com/" }
+    //maven{ url="http://server.bbkr.space:8081/artifactory/libs-snapshot/" } //shouldn't need snapshot repo any more
+    maven{ url="http://server.bbkr.space:8081/artifactory/libs-release/" }
+    maven{ url="https://maven.swordglowsblue.com/" }
+    maven{ url="https://maven.jamieswhiteshirt.com/libs-release/" }
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
-	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}"
+    modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modApi("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}") {
-		force = true
-	}
+    // Fabric API. This is technically optional, but you probably want it anyway.
+    modApi("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}") {
+        force = true
+    }
 
-	modApi "me.sargunvohra.mcmods:auto-config:${project.auto_config_version}"
-	modImplementation("me.shedaniel.cloth:config-2:${project.cloth_config_version}") {
-		force = true
-	}
+    modCompile "me.sargunvohra.mcmods:autoconfig1u:${project.auto_config_version}"
+    include ("me.sargunvohra.mcmods:autoconfig1u:${project.auto_config_version}") {
+        exclude group :"net.fabricmc.fabric-api"
+    }
+    modImplementation("me.shedaniel.cloth:config-2:${project.cloth_config_version}") {
+        force = true
+    }
 
-	modApi "vampirelib:VampireLib:${project.vampirelib_version}"
+    modImplementation "curse.maven:vampirelib:${project.vampirelib_version}"
+    include ("curse.maven:vampirelib:${project.vampirelib_version}") {
+        exclude group :"net.fabricmc.fabric-api"
+    }
 
-	// For dev env testing
-	modImplementation "com.jamieswhiteshirt:developer-mode:${project.developer_mode_version}"
-	modImplementation("me.shedaniel:RoughlyEnoughItems:${project.rei_version}") {
-		exclude(group: "io.github.prospector.modmenu", module: "ModMenu")
-	}
-	modApi ("io.github.cottonmc:LibGui:1.3.1") { exclude group:"io.github.prospector", module:"modmenu" }
-	modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
-	modImplementation "leaf-decay:leaf:decay:${project.leaf_decay_version}"
-	modImplementation "worldedit:worldedit-fabric-mc1.14.4:${project.we_version}"
-	modImplementation "artificemc:artifice:${project.artifice_version}"
+    // For dev env testing
+    modImplementation("me.shedaniel:RoughlyEnoughItems:${project.rei_version}") {
+        exclude(group: "io.github.prospector.modmenu", module: "ModMenu")
+    }
+    modApi ("io.github.cottonmc:LibGui:1.3.1") { exclude group:"io.github.prospector", module:"modmenu" }
+    modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
+    modImplementation "com.github.vampire-studios:artifice-unofficial:0.3.7-unofficial"
+    include "com.github.vampire-studios:artifice-unofficial:0.3.7-unofficial"
 
-	compile "com.google.code.findbugs:jsr305:3.0.2"
+    compile "com.google.code.findbugs:jsr305:3.0.2"
 }
 
 processResources {
-	inputs.property "version", project.version
+    inputs.property "version", project.version
 
-	from(sourceSets.main.resources.srcDirs) {
-		include "fabric.mod.json"
-		expand "version": project.version
-	}
+    from(sourceSets.main.resources.srcDirs) {
+        include "fabric.mod.json"
+        expand "version": project.version
+    }
 
-	from(sourceSets.main.resources.srcDirs) {
-		exclude "fabric.mod.json"
-	}
+    from(sourceSets.main.resources.srcDirs) {
+        exclude "fabric.mod.json"
+    }
 }
 
 tasks.withType(JavaCompile) {
-	options.encoding = "UTF-8"
+    options.encoding = "UTF-8"
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = "sources"
-	from sourceSets.main.allSource
+    classifier = "sources"
+    from sourceSets.main.allSource
 }
 
 jar {
-	from "LICENSE"
+    from "LICENSE"
 }
 
 publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			artifact(remapJar) {
-				builtBy remapJar
-			}
-			artifact(sourcesJar) {
-				builtBy remapSourcesJar
-			}
-		}
-	}
+    publications {
+        mavenJava(MavenPublication) {
+            artifact(remapJar) {
+                builtBy remapJar
+            }
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
+        }
+    }
 
-	repositories {
-		mavenLocal()
-	}
+    repositories {
+        mavenLocal()
+    }
 }

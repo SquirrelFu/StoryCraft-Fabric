@@ -70,7 +70,7 @@ public class SocialScreen extends Screen {
 
         //blit(x, y, z, u, v, width, height, texHeight, texWidth)
         this.minecraft.getTextureManager().bindTexture(TEXTURE);
-		blit(107, 62, this.blitOffset, 275.0F, 0.0F, 88, 80, 256, 512);
+		blit(107, 62, this.getBlitOffset(), 275.0F, 0.0F, 88, 80, 256, 512);
 
         String name = String.format("%s %s", this.target.firstName, this.target.lastName);
         String namePlusProfession = String.format("%s - %s", name, this.target.getFamiliarsProfession().getProfession());

@@ -2,6 +2,8 @@ package io.github.paradoxicalblock.storycraft.mixin.client;
 
 import io.github.paradoxicalblock.storycraft.entity.FamiliarsEntity;
 import io.github.paradoxicalblock.storycraft.main.ClientCore;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -17,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EntityRenderDispatcher.class)
 public class MixinEntityRenderDispatcher {
     @Inject(method = "<init>", at = @At("RETURN"))
-    public void onConstruct(TextureManager textureManager, ItemRenderer itemRenderer, ReloadableResourceManager reloadableResourceManager, CallbackInfo callbackInfo) {
+    public void onConstruct(TextureManager textureManager, ItemRenderer itemRenderer, ReloadableResourceManager reloadableResourceManager, TextRenderer textRenderer, GameOptions gameOptions, CallbackInfo callbackInfo) {
         ClientCore.addFamiliarsEntityRenderers((EntityRenderDispatcher) (Object) this);
     }
 

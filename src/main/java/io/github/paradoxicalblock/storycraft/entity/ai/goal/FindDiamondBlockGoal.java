@@ -9,10 +9,11 @@ import net.minecraft.entity.ai.goal.MoveToTargetPosGoal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
-import net.minecraft.world.ViewableWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
 
 public class FindDiamondBlockGoal extends MoveToTargetPosGoal {
 
@@ -35,7 +36,8 @@ public class FindDiamondBlockGoal extends MoveToTargetPosGoal {
         return this.tryingTime % 100 == 0;
     }
 
-    protected boolean isTargetPos(ViewableWorld viewableWorld_1, BlockPos blockPos_1) {
+    @Override
+    protected boolean isTargetPos(WorldView viewableWorld_1, BlockPos blockPos_1) {
         BlockState blockState_1 = viewableWorld_1.getBlockState(blockPos_1);
         return blockState_1.getBlock() instanceof OreBlock;
     }
@@ -47,7 +49,7 @@ public class FindDiamondBlockGoal extends MoveToTargetPosGoal {
             } else {
                 ++this.timer;
             }
-        } else if (!this.hasReached() && owner.getRand().nextFloat() < 0.05F) {
+        } else if (!this.hasReached() && owner.getRandom().nextFloat() < 0.05F) {
             owner.playSound(SoundEvents.ENTITY_FOX_SNIFF, 1.0F, 1.0F);
         }
 
@@ -60,7 +62,7 @@ public class FindDiamondBlockGoal extends MoveToTargetPosGoal {
         if (blockState_1.getBlock() instanceof OreBlock) {
             ItemStack itemStack_1 = owner.getEquippedStack(EquipmentSlot.MAINHAND);
             if (itemStack_1.isEmpty()) {
-                owner.setEquippedStack(EquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND));
+                owner.setStackInHand(Hand.MAIN_HAND, new ItemStack(Items.DIAMOND));
             }
             owner.playSound(SoundEvents.BLOCK_STONE_BREAK, 1.0F, 1.0F);
             world_1.breakBlock(this.targetPos, false);

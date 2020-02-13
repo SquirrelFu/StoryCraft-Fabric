@@ -2,9 +2,7 @@ package io.github.paradoxicalblock.storycraft.entity;
 
 import io.github.paradoxicalblock.storycraft.entity.ai.goal.FindDiamondBlockGoal;
 import io.github.paradoxicalblock.storycraft.entity.ai.goal.VillagerFarmGoal;
-import io.github.paradoxicalblock.storycraft.entity.ai.goal.VillagerStareGoal;
-import io.github.paradoxicalblock.storycraft.gui.BaseScreen;
-import io.github.paradoxicalblock.storycraft.gui.FamiliarsScreen;
+import io.github.paradoxicalblock.storycraft.gui.SocialScreen;
 import io.github.paradoxicalblock.storycraft.init.SCCustomTrackedData;
 import io.github.paradoxicalblock.storycraft.main.StoryCraft;
 import io.github.paradoxicalblock.storycraft.socialVillager.FamiliarsAspects;
@@ -159,7 +157,7 @@ public class FamiliarsEntity extends PassiveEntity {
         if (!this.goalsSet) {
             this.goalsSet = true;
             if (this.isBaby()) {
-                this.goalSelector.add(8, new VillagerStareGoal(this, 0.32D));
+//                this.goalSelector.add(8, new VillagerStareGoal(this, 0.32D));
             } else if (this.get(professionUnified).equals("Farmer")) {
                 this.goalSelector.add(6, new VillagerFarmGoal(this, 0.6D));
             } else if (this.get(professionUnified).equals("Guard")) {
@@ -313,7 +311,7 @@ public class FamiliarsEntity extends PassiveEntity {
 
     private void formOpinion(Entity person) {
         if (!opinions.containsKey(person.getUuid())) {
-            opinions.put(person.getUuid(), getRand().nextInt(50) - 25);
+            opinions.put(person.getUuid(), getRandom().nextInt(50) - 25);
         }
     }
 
@@ -322,8 +320,7 @@ public class FamiliarsEntity extends PassiveEntity {
         if (!opinions.containsKey(player.getUuid())) {
             formOpinion(player);
         }
-//        MinecraftClient.getInstance().openScreen(new SocialScreen(this, player));
-        MinecraftClient.getInstance().openScreen(new BaseScreen(new FamiliarsScreen(this, player)));
+        MinecraftClient.getInstance().openScreen(new SocialScreen(this, player));
         return true;
     }
 
@@ -381,7 +378,7 @@ public class FamiliarsEntity extends PassiveEntity {
             double double_1 = this.random.nextGaussian() * 0.02D;
             double double_2 = this.random.nextGaussian() * 0.02D;
             double double_3 = this.random.nextGaussian() * 0.02D;
-            this.world.addParticle(particleParameters_1, this.x + (double) (this.random.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.y + 1.0D + (double) (this.random.nextFloat() * this.getHeight()), this.z + (double) (this.random.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), double_1, double_2, double_3);
+            this.world.addParticle(particleParameters_1, this.getX() + (double) (this.random.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), this.getY() + 1.0D + (double) (this.random.nextFloat() * this.getHeight()), this.getZ() + (double) (this.random.nextFloat() * this.getWidth() * 2.0F) - (double) this.getWidth(), double_1, double_2, double_3);
         }
     }
 
@@ -445,7 +442,7 @@ public class FamiliarsEntity extends PassiveEntity {
         this.working = tag.getBoolean("working");
         this.sleeping = tag.getBoolean("sleeping");
         for (String key : tag.getKeys()) {
-            if (tag.hasUuid(key)) {
+            if (tag.containsUuid(key)) {
                 this.opinions.put(tag.getCompound(key).getUuid("holder"), tag.getInt("opinion"));
             }
         }

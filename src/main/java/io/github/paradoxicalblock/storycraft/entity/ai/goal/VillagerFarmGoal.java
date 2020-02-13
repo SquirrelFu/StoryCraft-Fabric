@@ -12,7 +12,7 @@ import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.ViewableWorld;
+import net.minecraft.world.WorldView;
 
 public class VillagerFarmGoal extends MoveToTargetPosGoal {
     private final FamiliarsEntity owner;
@@ -91,7 +91,7 @@ public class VillagerFarmGoal extends MoveToTargetPosGoal {
 
     }
 
-    protected boolean isTargetPos(ViewableWorld viewableWorld_1, BlockPos blockPos_1) {
+    protected boolean isTargetPos(WorldView viewableWorld_1, BlockPos blockPos_1) {
         Block block_1 = viewableWorld_1.getBlockState(blockPos_1).getBlock();
         if (block_1 == Blocks.FARMLAND) {
             blockPos_1 = blockPos_1.up();

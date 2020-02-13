@@ -1,3 +1,4 @@
+/*
 package io.github.paradoxicalblock.storycraft.entity.ai.goal;
 
 import io.github.paradoxicalblock.storycraft.entity.FamiliarsEntity;
@@ -24,7 +25,7 @@ public class VillagerStareGoal extends Goal {
     public boolean canStart() {
         if (this.owner.getBreedingAge() >= 0) {
             return false;
-        } else if (this.owner.getRand().nextInt(400) != 0) {
+        } else if (this.owner.getRandom().nextInt(400) != 0) {
             return false;
         } else {
             List<FamiliarsEntity> list_1 = this.owner.world.getEntities(FamiliarsEntity.class, this.owner.getBoundingBox().expand(6.0D, 3.0D, 6.0D));
@@ -83,3 +84,4 @@ public class VillagerStareGoal extends Goal {
 
     }
 }
+*/
