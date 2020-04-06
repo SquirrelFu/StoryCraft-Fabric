@@ -31,22 +31,22 @@ dependencies {
 	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modApi("net.fabricmc.fabric-api:fabric-api:0.5.1+build.294-1.15")
+	modApi("net.fabricmc.fabric-api:fabric-api:0.5.1+build.294-1.15") {
+		force = true
+	}
 
-//	modCompile 'com.github.modmuss50:OptiFabric:e1834b016f'
-//
-//	//Deps required for optifabric
-//	compile 'org.zeroturnaround:zt-zip:1.13'
-//	compile ('net.fabricmc:stitch:0.2.1.61') {
-//		transitive = false
-//	}
-
-	modApi ("me.sargunvohra.mcmods:auto-config:${project.auto_config_version}") {
+	modCompile ("me.sargunvohra.mcmods:autoconfig1u:${project.auto_config_version}") {
 		exclude group :"net.fabricmc.fabric-api"
 	}
-	modImplementation("me.shedaniel.cloth:config-2:${project.cloth_config_version}") {
+	include ("me.sargunvohra.mcmods:autoconfig1u:${project.auto_config_version}") {
 		exclude group :"net.fabricmc.fabric-api"
-		force = true
+	}
+
+	modCompile ("me.shedaniel.cloth:config-2:${project.cloth_config_version}") {
+		exclude group :"net.fabricmc.fabric-api"
+	}
+	include ("me.shedaniel.cloth:config-2:${project.cloth_config_version}") {
+		exclude group :"net.fabricmc.fabric-api"
 	}
 
 	modApi ("vampirelib:VampireLib:${project.vampirelib_version}") {
@@ -54,19 +54,19 @@ dependencies {
 	}
 
 	// For dev env testing
-	modRuntime("me.shedaniel:RoughlyEnoughItems:${project.rei_version}") {
-		exclude(group: "io.github.prospector.modmenu", module: "ModMenu")
+	modImplementation ("io.github.prospector:modmenu:${project.modmenu_version}") {
+		force = true
 	}
-	/*modRuntime ("informed-load:informedload:3.0.0") {
+
+	modImplementation("me.shedaniel:RoughlyEnoughItems:${project.rei_version}") {
+		exclude group: "io.github.prospector.modmenu"
 		exclude group :"net.fabricmc.fabric-api"
-	}*/
+	}
+
 	modApi ("io.github.cottonmc:LibGui:1.3.1") {
-		exclude group :"net.fabricmc.fabric-api"
-		exclude group:"io.github.prospector", module:"modmenu"
+		exclude group: "net.fabricmc.fabric-api"
+		exclude group: "io.github.prospector", module: "modmenu"
 	}
-	/*modImplementation ("io.github.prospector:modmenu:${project.modmenu_version}") {
-		exclude group :"net.fabricmc.fabric-api"
-	}*/
 
 	compile "com.google.code.findbugs:jsr305:3.0.2"
 }
