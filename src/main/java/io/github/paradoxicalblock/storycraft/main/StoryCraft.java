@@ -18,13 +18,13 @@ public class StoryCraft implements ModInitializer {
     public static final String MOD_ID = "storycraft";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static final QuestDataManager QUEST_DATA_MANAGER = new QuestDataManager();
-    public static EntityType<FamiliarsEntity> SOCIAL_VILLAGER;
+    public static EntityType<FamiliarsEntity> FAMILIARS;
 
     @Override
     public void onInitialize() {
         QUEST_DATA_MANAGER.registerReloadListener();
         FabricLoader.getInstance().getEntrypoints("storycraft:quests", Quest.class).forEach(QuestManager::registerQuest);
-        SOCIAL_VILLAGER = EntityRegistryBuilder
+        FAMILIARS = EntityRegistryBuilder
                 .<FamiliarsEntity>createBuilder("familiars")
                 .entity((var1, var2) -> new FamiliarsEntity(var2))
                 .category(EntityCategory.CREATURE)

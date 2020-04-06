@@ -138,7 +138,7 @@ public class TextureAssembler {
 
     public TextureAssembler(FamiliarsEntity familiarsEntity) {
         this.familiarsEntity = familiarsEntity;
-        this.eyeColor = familiarsEntity.getFamiliarsProfession().getProfession();
+        this.eyeColor = familiarsEntity.get(FamiliarsEntity.eyeColorUnified);
         this.hairColor = familiarsEntity.get(FamiliarsEntity.hairColorUnified);
         this.skinColor = familiarsEntity.get(FamiliarsEntity.skinColorUnified);
         this.hairstyle = familiarsEntity.get(FamiliarsEntity.hairStyleUnified);
@@ -471,6 +471,14 @@ public class TextureAssembler {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void save() {
+        this.familiarsEntity.set(FamiliarsEntity.eyeColorUnified, this.eyeColor);
+        this.familiarsEntity.set(FamiliarsEntity.hairColorUnified, this.hairColor);
+        this.familiarsEntity.set(FamiliarsEntity.skinColorUnified, this.skinColor);
+        this.familiarsEntity.set(FamiliarsEntity.hairStyleUnified, this.hairstyle);
+        this.familiarsEntity.set(FamiliarsEntity.genderUnified, this.gender);
     }
 
 }

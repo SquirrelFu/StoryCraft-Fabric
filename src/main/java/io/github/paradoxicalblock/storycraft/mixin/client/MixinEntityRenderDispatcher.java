@@ -24,7 +24,7 @@ public class MixinEntityRenderDispatcher {
     }
 
     @Inject(method = "getRenderer(Lnet/minecraft/entity/Entity;)Lnet/minecraft/client/render/entity/EntityRenderer;", at = @At("TAIL"), cancellable = true)
-    public void getRenderer(Entity entity, CallbackInfoReturnable<EntityRenderer> callbackInfoReturnable) {
+    public void getRenderer(Entity entity, CallbackInfoReturnable<EntityRenderer<?>> callbackInfoReturnable) {
         if (entity instanceof FamiliarsEntity) {
             callbackInfoReturnable.setReturnValue(ClientCore.familiarsEntityRendererMap.get(((FamiliarsEntity) entity).get(FamiliarsEntity.genderUnified)));
         }

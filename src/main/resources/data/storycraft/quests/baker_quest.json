@@ -1,60 +1,60 @@
 {
-  "registry_name": "storycraft:baker_test",
-  "profession": "Baker",
-  "icon": {
-    "item": "minecraft:cake"
-  },
-  "task": [
-    {
-      "name": "Testing",
-      "description": "This is a test quest",
-      "requirement": {
-        "stack": {
-          "item": "minecraft:iron_ore",
-          "count": 10
-        }
-      },
-      "reward": {
-        "stack": {
-          "item": "minecraft:cake",
-          "count": 2
-        },
-        "experience": 10
-      }
+    "registry_name": "storycraft:baker_test",
+    "profession": "Baker",
+    "icon": {
+        "item": "minecraft:cake"
     },
-    {
-      "name": "Testing 2",
-      "description": "This is a test quest",
-      "requirement": {
-        "stack": {
-          "item": "minecraft:iron_ore",
-          "count": 10
-        }
-      },
-      "reward": {
-        "stack": {
-          "item": "minecraft:cake",
-          "count": 2
+    "task": [
+        {
+            "name": "Testing",
+            "description": "This is a test quest",
+            "requirement": {
+                "stack": {
+                    "item": "minecraft:iron_ore",
+                    "count": 10
+                }
+            },
+            "reward": {
+                "stack": {
+                    "item": "minecraft:cake",
+                    "count": 2
+                },
+                "experience": 10
+            }
         },
-        "experience": 10
-      }
-    },
-    {
-      "name": "Testing 3",
-      "description": "This is a test quest",
-      "requirement": {
-        "stack": {
-          "item": "minecraft:iron_ore",
-          "count": 10
-        }
-      },
-      "reward": {
-        "stack": {
-          "item": "minecraft:cake",
-          "count": 2
+        {
+            "name": "Testing 2",
+            "description": "This is a test quest",
+            "requirement": {
+                "stack": {
+                    "item": "minecraft:iron_ore",
+                    "count": 10
+                }
+            },
+            "reward": {
+                "stack": {
+                    "item": "minecraft:cake",
+                    "count": 2
+                },
+                "experience": 10
+            }
         },
-        "experience": 10
-      }
-    }
-  ]
+        {
+            "name": "Testing 3",
+            "description": "This is a test quest",
+            "requirement": {
+                "stack": {
+                    "item": "minecraft:iron_ore",
+                    "count": 10
+                }
+            },
+            "reward": {
+                "stack": {
+                    "item": "minecraft:cake",
+                    "count": 2
+                },
+                "experience": 10
+            }
+        }
+    ]
 }

@@ -1,26 +1,26 @@
 {
-  "registry_name": "storycraft:baker_testing",
-  "profession": "Baker",
-  "icon": {
-    "item": "minecraft:cake"
-  },
-  "reward": {
-    "stack": {
-      "item": "minecraft:cake",
-      "count": 2
+    "registry_name": "storycraft:baker_testing",
+    "profession": "Baker",
+    "icon": {
+        "item": "minecraft:cake"
     },
-    "experience": 10
-  },
-  "tasks": [
-    {
-      "name": "Testing",
-      "description": "This is a test quest",
-      "requirement": {
+    "reward": {
         "stack": {
-          "item": "minecraft:iron_ore",
-          "count": 10
+            "item": "minecraft:cake",
+            "count": 2
+        },
+        "experience": 10
+    },
+    "tasks": [
+        {
+            "name": "Testing",
+            "description": "This is a test quest",
+            "requirement": {
+                "stack": {
+                    "item": "minecraft:iron_ore",
+                    "count": 10
+                }
+            }
         }
-      }
-    }
-  ]
+    ]
 }

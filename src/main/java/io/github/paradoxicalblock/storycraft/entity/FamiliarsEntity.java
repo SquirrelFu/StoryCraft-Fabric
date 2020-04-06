@@ -2,6 +2,7 @@ package io.github.paradoxicalblock.storycraft.entity;
 
 import io.github.paradoxicalblock.storycraft.entity.ai.goal.FindDiamondBlockGoal;
 import io.github.paradoxicalblock.storycraft.entity.ai.goal.VillagerFarmGoal;
+import io.github.paradoxicalblock.storycraft.entity.ai.goal.VillagerStareGoal;
 import io.github.paradoxicalblock.storycraft.gui.SocialScreen;
 import io.github.paradoxicalblock.storycraft.init.SCCustomTrackedData;
 import io.github.paradoxicalblock.storycraft.main.StoryCraft;
@@ -107,7 +108,7 @@ public class FamiliarsEntity extends PassiveEntity {
     private FamiliarsGender familiarsGender = new FamiliarsGender();
 
     public FamiliarsEntity(World world) {
-        this(StoryCraft.SOCIAL_VILLAGER, world);
+        this(StoryCraft.FAMILIARS, world);
     }
 
     private FamiliarsEntity(EntityType<? extends PassiveEntity> type, World world) {
@@ -157,7 +158,7 @@ public class FamiliarsEntity extends PassiveEntity {
         if (!this.goalsSet) {
             this.goalsSet = true;
             if (this.isBaby()) {
-//                this.goalSelector.add(8, new VillagerStareGoal(this, 0.32D));
+                this.goalSelector.add(8, new VillagerStareGoal(this, 0.32D));
             } else if (this.get(professionUnified).equals("Farmer")) {
                 this.goalSelector.add(6, new VillagerFarmGoal(this, 0.6D));
             } else if (this.get(professionUnified).equals("Guard")) {
@@ -171,7 +172,6 @@ public class FamiliarsEntity extends PassiveEntity {
                 this.targetSelector.add(2, new RevengeGoal(this));
                 this.targetSelector.add(3, new FollowTargetGoal<>(this, MobEntity.class, 5, false, false, (livingEntity_1) ->
                         livingEntity_1 instanceof Monster && !(livingEntity_1 instanceof CreeperEntity)));
-
             }
         }
     }
@@ -321,6 +321,7 @@ public class FamiliarsEntity extends PassiveEntity {
             formOpinion(player);
         }
         MinecraftClient.getInstance().openScreen(new SocialScreen(this, player));
+//        MinecraftClient.getInstance().openScreen(new BaseScreen(new FamiliarsScreen(this, player)));
         return true;
     }
 
@@ -383,8 +384,7 @@ public class FamiliarsEntity extends PassiveEntity {
     }
 
     @Override
-    public void writeCustomDataToTag(CompoundTag tag) {
-        super.writeCustomDataToTag(tag);
+    public CompoundTag toTag(CompoundTag tag) {
         tag.putString("hair_color", hairColor);
         tag.putString("eye_color", eyeColor);
         tag.putString("skin_color", skinColor);
@@ -410,6 +410,12 @@ public class FamiliarsEntity extends PassiveEntity {
                 tag.put(key.toString(), opinionTag);
             }
         }
+        return tag;
+    }
+
+    @Override
+    public void writeCustomDataToTag(CompoundTag tag) {
+        super.writeCustomDataToTag(tag);
     }
 
     private void unifiedSetup() {
@@ -422,16 +428,16 @@ public class FamiliarsEntity extends PassiveEntity {
     }
 
     @Override
-    public void readCustomDataFromTag(CompoundTag tag) {
-        super.readCustomDataFromTag(tag);
-        this.dataTracker.set(hairColorUnified, hairColor);
-        this.dataTracker.set(eyeColorUnified, eyeColor);
-        this.dataTracker.set(skinColorUnified, skinColor);
-        this.dataTracker.set(hairStyleUnified, hairStyle);
-        this.dataTracker.set(orientationUnified, sexuality);
+    public void fromTag(CompoundTag tag) {
+        super.fromTag(tag);
         this.dataTracker.set(serverUUID, this.getUuidAsString());
-        this.dataTracker.set(genderUnified, gender);
-        this.dataTracker.set(professionUnified, profession);
+        this.hairColor = tag.getString("hair_color");
+        this.eyeColor = tag.getString("eye_color");
+        this.skinColor = tag.getString("skin_color");
+        this.hairStyle = tag.getInt("hair_style");
+        this.sexuality = tag.getString("sexuality");
+        this.gender = tag.getString("gender");
+        this.profession = tag.getString("profession");
         this.friendliness = tag.getInt("friendliness");
         this.bravery = tag.getInt("bravery");
         this.generosity = tag.getInt("generosity");
@@ -446,17 +452,22 @@ public class FamiliarsEntity extends PassiveEntity {
                 this.opinions.put(tag.getCompound(key).getUuid("holder"), tag.getInt("opinion"));
             }
         }
-        if (hairColor == null || hairColor.equals("")) {
+        /*if (hairColor == null || hairColor.equals("")) {
             unifiedSetup();
-        }
+        }*/
         this.setBreedingAge(tag.getInt("age"));
         this.setCanPickUpLoot(true);
         this.setSpecificGoals();
     }
 
     @Override
+    public void readCustomDataFromTag(CompoundTag tag) {
+        super.readCustomDataFromTag(tag);
+    }
+
+    @Override
     public PassiveEntity createChild(PassiveEntity var1) {
-        return new FamiliarsEntity(StoryCraft.SOCIAL_VILLAGER, this.world);
+        return new FamiliarsEntity(StoryCraft.FAMILIARS, this.world);
     }
 
     private String generateFirstName(String gender) throws IOException {

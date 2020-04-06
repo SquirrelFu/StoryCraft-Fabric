@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import io.github.paradoxicalblock.storycraft.util.TextureAssembler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
@@ -22,10 +21,6 @@ import java.io.InputStream;
 
 @Environment(value = EnvType.CLIENT)
 public class FamiliarsEntityRenderer extends MobEntityRenderer<FamiliarsEntity, PlayerEntityModel<FamiliarsEntity>> {
-    public FamiliarsEntityRenderer(EntityRenderDispatcher dispatcher, EntityRendererRegistry.Context context) {
-        this(dispatcher, true);
-    }
-
     public FamiliarsEntityRenderer(EntityRenderDispatcher dispatcher, boolean thinArms) {
         super(dispatcher, new PlayerEntityModel<>(0.0F, thinArms), 0.5F);
     }
@@ -35,7 +30,8 @@ public class FamiliarsEntityRenderer extends MobEntityRenderer<FamiliarsEntity, 
         if (this.getRenderManager().textureManager.getTexture(new Identifier("minecraft:dynamic/" + entity.getDataTracker().get(FamiliarsEntity.serverUUID) + "_1")) != null) {
             return new Identifier("minecraft:dynamic/" + entity.getDataTracker().get(FamiliarsEntity.serverUUID) + "_1");
         }
-        BufferedImage imageBase = new TextureAssembler(entity).createTexture();
+        TextureAssembler assembler = new TextureAssembler(entity);
+        BufferedImage imageBase = assembler.createTexture();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         try {
             ImageIO.write(imageBase, "png", stream);
@@ -50,13 +46,14 @@ public class FamiliarsEntityRenderer extends MobEntityRenderer<FamiliarsEntity, 
             e.printStackTrace();
         }
         NativeImageBackedTexture texture = new NativeImageBackedTexture(base);
+        assembler.save();
         return this.getRenderManager().textureManager.registerDynamicTexture(entity.getDataTracker().get(FamiliarsEntity.serverUUID), texture);
     }
 
     @Override
-    protected void scale(FamiliarsEntity livingEntity_1, MatrixStack matrixStack, float f) {
+    protected void scale(FamiliarsEntity entity, MatrixStack matrices, float tickDelta) {
         float float_2 = 0.9375F;
-        if (livingEntity_1.isBaby()) {
+        if (entity.isBaby()) {
             float_2 = (float) ((double) float_2 * 0.5D);
             this.shadowSize = 0.25F;
         } else {

@@ -3,6 +3,7 @@
 	"package": "io.github.paradoxicalblock.storycraft.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"client": [
+		"client.MixinEntityRenderDispatcher"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -16,7 +16,8 @@ public class ClientCore implements ClientModInitializer {
     }
 
     public void onInitializeClient() {
-        EntityRendererRegistry.INSTANCE.register(StoryCraft.SOCIAL_VILLAGER, FamiliarsEntityRenderer::new);
+        EntityRendererRegistry.INSTANCE.register(StoryCraft.FAMILIARS, (manager, context) ->
+                new FamiliarsEntityRenderer(manager, false));
     }
 
 }

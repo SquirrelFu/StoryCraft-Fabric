@@ -36,7 +36,6 @@ public class FindDiamondBlockGoal extends MoveToTargetPosGoal {
         return this.tryingTime % 100 == 0;
     }
 
-    @Override
     protected boolean isTargetPos(WorldView viewableWorld_1, BlockPos blockPos_1) {
         BlockState blockState_1 = viewableWorld_1.getBlockState(blockPos_1);
         return blockState_1.getBlock() instanceof OreBlock;
