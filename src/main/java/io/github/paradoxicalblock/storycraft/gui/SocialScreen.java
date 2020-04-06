@@ -1,11 +1,11 @@
 package io.github.paradoxicalblock.storycraft.gui;
 
+import io.github.cottonmc.cotton.gui.client.ScreenDrawing;
 import io.github.paradoxicalblock.questing_api.QuestManager;
 import io.github.paradoxicalblock.questing_api.api.Quest;
 import io.github.paradoxicalblock.questing_api.api.QuestTask;
 import io.github.paradoxicalblock.storycraft.entity.FamiliarsEntity;
 import io.github.paradoxicalblock.storycraft.main.StoryCraft;
-import io.github.vampirestudios.vampirelib.client.ScreenDrawing;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -66,7 +66,7 @@ public class SocialScreen extends Screen {
     @Override
     public void render(int mouseX, int mouseY, float delta) {
         this.renderBackground();
-        ScreenDrawing.rect(TEXTURE, 102, 44, 275, 166, 0.0F, 0.0F, 0.537F, 0.651F, 0xFFFFFFFF);
+        ScreenDrawing.texturedRect(102, 44, 275, 166, TEXTURE, 0.0F, 0.0F, 0.537F, 0.651F, 0xFFFFFFFF);
 
         //blit(x, y, z, u, v, width, height, texHeight, texWidth)
         this.minecraft.getTextureManager().bindTexture(TEXTURE);
@@ -79,12 +79,8 @@ public class SocialScreen extends Screen {
         String questTitle = "Quests";
         this.font.draw(questTitle, 100 + this.font.getStringWidth(questTitle), 51, 4210752);
 
-        String taskTitle = "Tasks";
-        this.font.draw(taskTitle, 100 + this.font.getStringWidth(questTitle), 51, 4210752);
-
         for (SocialVillagerQuestButton questButton : questButtons) {
             questButton.render(mouseX, mouseY, delta);
-
             if (questButton.getQuest() != null) {
                 for(QuestTask task : questButton.getQuest().getTasks()) {
                     for (int i = 0; i < questButton.getQuest().getTasks().length; i++) {
@@ -97,9 +93,6 @@ public class SocialScreen extends Screen {
                     }
                 }
                 getRewardButton.render(mouseX, mouseY, delta);
-            } else {
-//                String noQuests = "This villager has no quests";
-//                this.font.draw(noQuests, 205, 101, 4210752);
             }
         }
 
